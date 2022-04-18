@@ -33,7 +33,7 @@ case $OS in
         fi
         install() {
             echo "Installing $@"
-            if [ "$(dpkg --list | grep "$1")" = "" ; then
+            if [ "$(dpkg --list | grep "$1")" = "" ]; then
                 sudo apt-get install "$@"
                 echo
             fi
