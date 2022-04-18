@@ -8,13 +8,22 @@ echo "mydotfiles install script"
 echo
 
 OS="`uname`"
+
+case $OS in
+    'Darwin')
+        OS="osx"
+        ;;
+    'Linux')
+        OS="linux"
+        ;;
+esac
+
 echo "Found operating system $OS"
 echo "Starting installation"
 echo
 
 case $OS in
-    'Linux')
-        OS='linux'
+    'linux')
         if ! command -v apt-get &> /dev/null; then
             echo "Linux found, however, only works in Debian based systems for now."
             exit 2
@@ -34,8 +43,7 @@ case $OS in
         sudo apt-get update
         sudo apt-get upgrade
         ;;
-    'Darwin') 
-        OS='osx'
+    'osx') 
         install() {
             echo "Installing $@"
             if ! brew list "$1" >/dev/null 2>&1; then
