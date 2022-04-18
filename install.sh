@@ -73,7 +73,6 @@ packages=(
     moreutils
     findutils
     bash
-    bash-completion@2
     wget
     gnupg
     grep
@@ -90,27 +89,55 @@ packages=(
     pyenv
     pyenv-virtualenv
     ruby
+    rbenv
+    ruby-build
     fontconfig
     openssl
+    openvpn
     readline
     sqlite3
     xz
     zlib
-    emacs
 )
 
 linux_packages=(
-    gvim
+    bash-completion
+    vim
     texlive
     docker
+    emacs
 )
 
 osx_packages=(
+    bash-completion@2
     iterm2
     gnu-sed
     homebrew/cask/macvim
     mactex
     homebrew/cask/docker
+    homebrew/cask/emacs
+    homebrew/cask/firefox
+    homebrew/cask/spotify
+    homebrew/cask/discord
+    homebrew/cask/skype
+    homebrew/cask/gimp
+    homebrew/cask/vlc
+    homebrew/cask/visual-studio-code
+    homebrew/cask/balenaetcher
+    homebrew/cask/whatsapp
+    homebrew/cask/the-unarchiver
+    homebrew/cask/telegram
+    homebrew/cask/teamspeak-client
+    homebrew/cask/steam
+    homebrew/cask/slack
+    homebrew/cask/microsoft-teams
+    homebrew/cask/microsoft-remote-desktop
+    homebrew/cask/messenger
+    homebrew/cask/webex-meetings
+    homebrew/cask/adobe-acrobat-reader
+    homebrew/cask/1password
+    homebrew/cask/google-drive
+    homebrew/cask/alfred
 )
 
 # Only run if we are on Linux desktop (not server or Mac)
