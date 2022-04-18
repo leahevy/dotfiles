@@ -8,6 +8,10 @@ These are my dotfiles.
 [![macOS](https://svgshare.com/i/ZjP.svg)](https://svgshare.com/i/ZjP.svg)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+The repository should be cloned to `~/.dotfiles`.
+
+To install the required packages run `~/.dotfiles/install.sh`.
+
 It can be simply used by installing the python package with `pip install -e .` which will install all dependencies.
 
 Then run `mydotfiles` to install the dotfiles.
