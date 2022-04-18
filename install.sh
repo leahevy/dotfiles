@@ -184,6 +184,8 @@ if [ "$FISH_CMD" != "" ]; then
         echo "Set shell to fish"
         echo "$FISH_CMD" | sudo tee -a /etc/shells
         chsh -s "$FISH_CMD"
+
+        curl -L https://get.oh-my.fish | fish
     fi
 fi
 
