@@ -4,6 +4,9 @@ set -euo pipefail
 PYTHON_VERSION=3.10.3
 RUBY_VERSION=3.1.2
 
+SCRIPT=$(readlink -f $0)
+SCRIPTPATH=`dirname $SCRIPT`
+
 echo "mydotfiles install script"
 echo
 
@@ -206,5 +209,9 @@ if ! rbenv versions | grep "$RUBY_VERSION" >/dev/null 2>&1; then
 fi
 
 finalize
+
+if [ "$OS" == "osx" ]; then
+    "$SCRIPTPATH/macos.sh"
+fi
 
 echo "Everything done"
