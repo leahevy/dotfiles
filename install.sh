@@ -184,12 +184,16 @@ echo "Check shells"
 FISH_CMD="$(whereis -b fish | cut -f 2 -d : | xargs)"
 if [ "$FISH_CMD" != "" ]; then
     if [ "$(cat /etc/shells | grep "$FISH_CMD")" = "" ]; then
+        echo "Configure fish as login shell"
         echo "Set shell to fish"
         echo "$FISH_CMD" | sudo tee -a /etc/shells
         chsh -s "$FISH_CMD"
-
-        curl -L https://get.oh-my.fish | fish
     fi
+fi
+
+if [ ! -d "$HOME/.local/share/omf" ]; then
+    echo "Install Oh My Fish"
+    curl -L https://get.oh-my.fish | fish
 fi
 
 echo "Check Python installation"
