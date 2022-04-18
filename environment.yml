@@ -1,3 +1,11 @@
 private-repo:
   path: ~/.dotfiles-private
   use: true
+private:
+  git:
+    name:
+    mail:
+  user:
+    name:
+    mail:
+    
