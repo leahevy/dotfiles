@@ -34,17 +34,17 @@ case $OS in
         install() {
             echo "Installing $@"
             if [ "$(dpkg --list | grep "$1")" = "" ]; then
-                sudo apt-get install "$@"
+                DEBIAN_FRONTEND=noninteractive sudo apt-get install -qq "$@"
                 echo
             fi
         }
         finalize() {
             echo "Cleaning up packages"
-            sudo apt-get autoremove
+            DEBIAN_FRONTEND=noninteractive sudo apt-get -qq autoremove
             echo
         }
-        sudo apt-get update
-        sudo apt-get upgrade
+        DEBIAN_FRONTEND=noninteractive sudo apt-get update
+        DEBIAN_FRONTEND=noninteractive sudo apt-get -qq upgrade
         ;;
     'osx') 
         install() {
