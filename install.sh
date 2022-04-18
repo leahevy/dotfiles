@@ -96,7 +96,6 @@ packages=(
     python3
     htop
     fish
-    graphviz
     pyenv
     pyenv-virtualenv
     ruby
@@ -123,6 +122,7 @@ linux_packages=(
 osx_packages=(
     svn
     font-source-code-pro
+    graphviz
     bash-completion@2
     iterm2
     gnu-sed
