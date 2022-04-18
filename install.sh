@@ -101,8 +101,6 @@ packages=(
     openvpn
     readline
     sqlite3
-    xz
-    zlib
 )
 
 linux_packages=(
@@ -147,6 +145,8 @@ osx_packages=(
     gnu-sed
     homebrew/cask/macvim
     mactex
+    xz
+    zlib
     homebrew/cask/docker
     homebrew/cask/emacs
     homebrew/cask/firefox
