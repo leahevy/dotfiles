@@ -96,11 +96,7 @@ packages=(
     python3
     htop
     fish
-    pyenv
-    pyenv-virtualenv
     ruby
-    rbenv
-    ruby-build
     fontconfig
     openssl
     openvpn
@@ -137,6 +133,10 @@ linux_packages=(
 )
 
 osx_packages=(
+    pyenv
+    pyenv-virtualenv
+    rbenv
+    ruby-build
     svn
     font-source-code-pro
     graphviz
@@ -215,20 +215,23 @@ if [ ! -d "$HOME/.local/share/omf" ]; then
     curl -L https://get.oh-my.fish | fish
 fi
 
-echo "Check Python installation"
-if ! pyenv versions | grep "$PYTHON_VERSION" >/dev/null 2>&1; then
-    echo "Install Python$PYTHON_VERSION with pyenv"
-    pyenv install "$PYTHON_VERSION"
-    pyenv global "$PYTHON_VERSION"
-    echo
+if [ "$OS" == "osx" ]; then
+    echo "Check Python installation"
+    if ! pyenv versions | grep "$PYTHON_VERSION" >/dev/null 2>&1; then
+        echo "Install Python$PYTHON_VERSION with pyenv"
+        pyenv install "$PYTHON_VERSION"
+        pyenv global "$PYTHON_VERSION"
+        echo
+    fi
 fi
 
-echo "Check Ruby installation"
-if ! rbenv versions | grep "$RUBY_VERSION" >/dev/null 2>&1; then
-    echo "Install Ruby$RUBY_VERSION with rbenv"
-    rbenv install "$RUBY_VERSION"
-    rbenv global "$RUBY_VERSION"
-    echo
+    echo "Check Ruby installation"
+    if ! rbenv versions | grep "$RUBY_VERSION" >/dev/null 2>&1; then
+        echo "Install Ruby$RUBY_VERSION with rbenv"
+        rbenv install "$RUBY_VERSION"
+        rbenv global "$RUBY_VERSION"
+        echo
+    fi
 fi
 
 finalize
