@@ -33,7 +33,7 @@ case $OS in
         fi
         install() {
             echo "Installing $@"
-            if [ "$(dpkg --list | grep "$1")" = "" ]; then
+            if [ "$(dpkg --list | grep "$1 ")" = "" ]; then
                 DEBIAN_FRONTEND=noninteractive sudo apt-get install -qq "$@"
                 echo
             fi
@@ -87,7 +87,6 @@ packages=(
     wget
     gnupg
     grep
-    openssh
     screen
     ack
     git
@@ -115,6 +114,7 @@ linux_packages=(
     docker
     emacs
     make
+    openssh-client
     build-essential
     libssl-dev
     zlib1g-dev
@@ -138,6 +138,7 @@ osx_packages=(
     pyenv-virtualenv
     rbenv
     ruby-build
+    openssh
     svn
     font-source-code-pro
     graphviz
