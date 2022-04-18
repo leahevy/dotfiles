@@ -89,6 +89,7 @@ packages=(
     sqlite3
     xz
     zlib
+    emacs
 )
 
 linux_packages=(
