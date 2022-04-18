@@ -10,9 +10,6 @@
 .Spotlight-V100
 .Trashes
 
-# vi
-*~
-
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
@@ -20,3 +17,13 @@ Network Trash Folder
 Temporary Items
 .apdisk
 {% endif %}
+
+# vi
+*~
+
+# Thumbnail cache files
+._*
+Thumbs.db
+
+# Compiled Python files
+*.pyc
