@@ -22,6 +22,9 @@ These settings (`~/.dotfiles-private/environment.yaml`) are:
 ```
 private:
   git:
+    name: <Your git commit name>
+    mail: <Your git commit email>
+  user:
     name: <Your name>
     mail: <Your email>
 ```

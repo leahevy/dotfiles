@@ -5,6 +5,7 @@ import glob
 import platform
 import yaml
 import shutil
+import getpass
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
@@ -25,6 +26,11 @@ def main():
     global_env = {
         "global": {
             "os": _system,
+            "user": {
+                "name": getpass.getuser(),
+                "home": os.path.expanduser("~"),
+            },
+            "env": dict(os.environ),
         }
     }
 
