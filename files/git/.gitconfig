@@ -8,3 +8,92 @@
 	email = {{ private['git']['mail'] }}
 [pull]
 	rebase = false
+[color]
+  	branch = auto
+  	diff = auto
+  	status = auto
+	ui = auto
+[color "branch"]
+  	current = yellow reverse
+  	local = yellow 
+  	remote = green
+	upstream = cyan
+[color "diff"]
+  	meta = yellow bold
+  	frag = magenta bold
+  	old = red bold
+  	new = green bold
+[color "status"]
+  	added = yellow
+  	changed = green
+  	untracked = cyan
+[format]
+	pretty = format:%Cred%h%Creset - %Cgreen%an (%ae) -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset
+	date = relative
+[alias]
+	aliases = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
+	lg = log --graph --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset'
+  	graph = "!f() { git log --graph --pretty=format:'%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --date=relative $@; } ; f"
+	y = diff "@{yesterday}"
+  	w = whatchanged
+  	c = commit
+  	st = status
+  	dc = diff --cached
+  	co = checkout
+	df = diff
+	addp = add --patch
+	diffc = diff --cached
+	amendfiles = commit --amend --no-edit
+	review-local = "!git lg @{push}.."
+	reword = commit --amend
+	uncommit = reset --soft HEAD~1
+	untrack = rm --cache --
+	conflicts = diff --name-only --diff-filter=U
+[core]
+  	# pager = cat
+  	excludesfile = ~/.gitignore_global
+  	editor = code --wait
+  	whitespace = -trailing-space
+[diff]
+  	mnemonicPrefix = true
+  	renames = true
+  	wordRegex = .
+  	submodule = log
+  	tool = vscode
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+[fetch]
+  	recurseSubmodules = on-demand
+[grep]
+  	break = true
+  	heading = true
+  	lineNumber = true
+  	extendedRegexp = true
+[log]
+  	abbrevCommit = true
+  	follow = true
+  	decorate = false
+[merge]
+	ff = false
+[mergetool]
+  	keepBackup = false
+  	keepTemporaries = false
+  	writeToTemp = true
+  	prompt = false
+[pull]
+  	rebase = merges
+[push]
+  	default = upstream
+  	followTags = true
+[status]
+  	submoduleSummary = true
+  	showUntrackedFiles = all
+[tag]
+	sort = version:refname
+[versionsort]
+  	prereleaseSuffix = -pre
+  	prereleaseSuffix = .pre
+  	prereleaseSuffix = -beta
+  	prereleaseSuffix = .beta
+  	prereleaseSuffix = -rc
+  	prereleaseSuffix = .rc
