@@ -60,20 +60,30 @@ def main():
     )
 
     print("  Processing files:")
-    for path in Path(os.path.join(SCRIPT_DIR, "files")).rglob("*"):
+    for path in sorted(Path(os.path.join(SCRIPT_DIR, "files")).rglob("*")):
         namespace = str(path)[len(FILES_DIR) + 1 :]
-        if path.is_dir() and len(namespace.split(os.sep)) == 1:
+        path_str = str(path.resolve())
+        path_str = path_str[len(FILES_DIR) + 1 :]
+
+        split_path = path_str.split(os.sep)
+        file_path = os.sep.join(split_path[1:])
+
+        result_file = os.path.join(os.path.expanduser("~"), file_path)
+        if (
+            path.is_dir()
+            and len(namespace.split(os.sep)) == 1
+            and os.listdir(path=path)
+        ):
             print(f"    Namespace {namespace}:")
-        if path.is_file():
-            path_str = str(path.resolve())
-            path_str = path_str[len(FILES_DIR) + 1 :]
-
-            split_path = path_str.split(os.sep)
-            file_path = os.sep.join(split_path[1:])
-
+        elif path.is_dir() and len(namespace.split(os.sep)) > 1:
+            print("      MakeDir", result_file)
+            os.makedirs(result_file, exist_ok=True)
+        elif path.is_file():
             template = env.get_template(path_str)
 
-            result_file = os.path.join(os.path.expanduser("~"), file_path)
+            if not os.path.exists(result_file_dir := os.path.dirname(result_file)):
+                print("      MakeDir", result_file_dir)
+                os.makedirs(os.path.dirname(result_file), exist_ok=True)
             print("      Write", result_file)
             with open(result_file, "w") as f:
                 f.write(template.render(final_env))
