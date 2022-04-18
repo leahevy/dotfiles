@@ -77,6 +77,7 @@ case $OS in
 esac
 
 packages=(
+    svn
     coreutils
     moreutils
     findutils
@@ -117,6 +118,7 @@ linux_packages=(
 )
 
 osx_packages=(
+    font-source-code-pro
     bash-completion@2
     iterm2
     gnu-sed
@@ -173,6 +175,16 @@ elif [ "$OS" == "linux" ]; then
         package_array=($package)
         install "${package_array[@]}"
     done
+fi
+
+echo "Check shells"
+FISH_CMD="$(whereis -b fish | cut -f 2 -d : | xargs)"
+if [ "$FISH_CMD" != "" ]; then
+    if [ "$(cat /etc/shells | grep "$FISH_CMD")" = "" ]; then
+        echo "Set shell to fish"
+        echo "$FISH_CMD" | sudo tee -a /etc/shells
+        chsh -s "$FISH_CMD"
+    fi
 fi
 
 echo "Check Python installation"
