@@ -55,6 +55,8 @@ packages=(
     fontconfig
 )
 
+linux_packages=()
+
 osx_packages=(
     iterm2
 )
@@ -65,6 +67,10 @@ done
 
 if [ "$OS" == "osx" ]; then
     for package in "${osx_packages[@]}"; do
+        install "$package"
+    done
+elif [ "$OS" == "linux" ]; then
+    for package in "${linux_packages[@]}"; do
         install "$package"
     done
 fi
