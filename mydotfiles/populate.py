@@ -95,8 +95,9 @@ def process_files(files_dir: str, env_dict: dict):
         elif path.is_dir() and len(namespace.split(os.sep)) == 1:
             print(f"    Namespace {namespace} (empty)")
         elif path.is_dir() and len(namespace.split(os.sep)) > 1:
-            print("      MakeDir", result_file)
-            os.makedirs(result_file, exist_ok=True)
+            if not os.path.exists(result_file):
+                print("      MakeDir", result_file)
+                os.makedirs(result_file, exist_ok=True)
         elif path.is_file() and len(namespace.split(os.sep)) > 1:
             template = env.get_template(path_str)
 
