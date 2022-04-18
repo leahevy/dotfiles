@@ -1,5 +1,8 @@
 #!/bin/bash
 set -euo pipefail
+
+PYTHON_VERSION=3.10.3
+
 echo "mydotfiles install script"
 echo
 
@@ -62,12 +65,10 @@ packages=(
     coreutils
     moreutils
     findutils
-    gnu-sed
     bash
-    bash-completion2
+    bash-completion@2
     wget
     gnupg
-    vim
     grep
     openssh
     screen
@@ -77,18 +78,31 @@ packages=(
     gs
     python3
     htop
-    docker
     fish
     graphviz
+    pyenv
     pyenv-virtualenv
     ruby
     fontconfig
+    openssl
+    readline
+    sqlite3
+    xz
+    zlib
 )
 
-linux_packages=()
+linux_packages=(
+    gvim
+    texlive
+    docker
+)
 
 osx_packages=(
     iterm2
+    gnu-sed
+    homebrew/cask/macvim
+    mactex
+    homebrew/cask/docker
 )
 
 for package in "${packages[@]}"; do
@@ -99,14 +113,22 @@ done
 if [ "$OS" == "osx" ]; then
     for package in "${osx_packages[@]}"; do
         package_array=($package)
-        echo install "${package_array[@]}"
+        install "${package_array[@]}"
     done
 elif [ "$OS" == "linux" ]; then
     for package in "${linux_packages[@]}"; do
         package_array=($package)
-        echo install "${package_array[@]}"
+        install "${package_array[@]}"
     done
 fi
+
+echo "Check Python installation"
+if ! pyenv versions | grep "$PYTHON_VERSION" >/dev/null 2>&1; then
+    echo "Install Python$PYTHON_VERSION with pyenv"
+    pyenv install "$PYTHON_VERSION"
+    pyenv global "$PYTHON_VERSION"
+fi
+echo
 
 finalize
 
