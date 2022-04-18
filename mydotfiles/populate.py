@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import os.path
+import glob
 import platform
 import yaml
 from pathlib import Path
@@ -63,13 +64,19 @@ def main():
 
     if private_dotfiles_location:
         process_files(os.path.join(private_dotfiles_location, "files"), final_env)
+    print(
+        "Dotfiles populated (Consider running ~/install.sh to install required packages)"
+    )
 
 
 def process_files(files_dir: str, env_dict: dict):
     env = Environment(
         loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
     )
-    print(f"  Processing files in {files_dir}:")
+    if glob.glob(os.path.join(files_dir, "*")):
+        print(f"  Processing files in {files_dir}:")
+    else:
+        print(f"  Processing files in {files_dir} (empty)")
     for path in sorted(Path(files_dir).rglob("*")):
         namespace = str(path)[len(files_dir) + 1 :]
         path_str = str(path.resolve())
@@ -85,6 +92,8 @@ def process_files(files_dir: str, env_dict: dict):
             and os.listdir(path=path)
         ):
             print(f"    Namespace {namespace}:")
+        elif path.is_dir() and len(namespace.split(os.sep)) == 1:
+            print(f"    Namespace {namespace} (empty)")
         elif path.is_dir() and len(namespace.split(os.sep)) > 1:
             print("      MakeDir", result_file)
             os.makedirs(result_file, exist_ok=True)
