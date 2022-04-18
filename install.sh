@@ -200,7 +200,7 @@ for package in "${packages[@]}"; do
 done
 
 echo "Check shells"
-FISH_CMD="$(whereis -b fish | cut -f 2 -d : | xargs)"
+FISH_CMD="$(whereis -b fish | cut -f 2 -d : | xargs | cut -f 1 -d " ")"
 if [ "$FISH_CMD" != "" ]; then
     if [ "$(cat /etc/shells | grep "$FISH_CMD")" = "" ]; then
         echo "Configure fish as login shell"
