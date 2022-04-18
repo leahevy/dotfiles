@@ -206,7 +206,7 @@ if [ "$FISH_CMD" != "" ]; then
         echo "Configure fish as login shell"
         echo "Set shell to fish"
         echo "$FISH_CMD" | sudo tee -a /etc/shells
-        chsh -s "$FISH_CMD"
+        sudo chsh -s "$FISH_CMD"
     fi
 fi
 
