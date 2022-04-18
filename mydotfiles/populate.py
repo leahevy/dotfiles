@@ -27,14 +27,18 @@ def main():
     }
 
     private_env = {}
+    private_dotfiles_location = None
     with open(CONFIG_PATH, "r") as f:
         print(f"  Read public config ({CONFIG_PATH})")
         env = yaml.safe_load(f) or {}
         if "private-repo" in env.keys():
             if "use" in env["private-repo"]:
                 if env["private-repo"]["use"]:
+                    private_dotfiles_location = os.path.expanduser(
+                        env["private-repo"]["path"]
+                    )
                     private_config_path = os.path.join(
-                        os.path.expanduser(env["private-repo"]["path"]),
+                        private_dotfiles_location,
                         "environment.yml",
                     )
                     with open(
@@ -55,15 +59,21 @@ def main():
 
     final_env = merge_dicts_deep(merge_dicts_deep(private_env, env), global_env)
 
-    env = Environment(
-        loader=FileSystemLoader(FILES_DIR), trim_blocks=True, lstrip_blocks=True
-    )
+    process_files(os.path.join(SCRIPT_DIR, "files"), final_env)
 
-    print("  Processing files:")
-    for path in sorted(Path(os.path.join(SCRIPT_DIR, "files")).rglob("*")):
-        namespace = str(path)[len(FILES_DIR) + 1 :]
+    if private_dotfiles_location:
+        process_files(os.path.join(private_dotfiles_location, "files"), final_env)
+
+
+def process_files(files_dir: str, env_dict: dict):
+    env = Environment(
+        loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
+    )
+    print(f"  Processing files in {files_dir}:")
+    for path in sorted(Path(files_dir).rglob("*")):
+        namespace = str(path)[len(files_dir) + 1 :]
         path_str = str(path.resolve())
-        path_str = path_str[len(FILES_DIR) + 1 :]
+        path_str = path_str[len(files_dir) + 1 :]
 
         split_path = path_str.split(os.sep)
         file_path = os.sep.join(split_path[1:])
@@ -78,7 +88,7 @@ def main():
         elif path.is_dir() and len(namespace.split(os.sep)) > 1:
             print("      MakeDir", result_file)
             os.makedirs(result_file, exist_ok=True)
-        elif path.is_file():
+        elif path.is_file() and len(namespace.split(os.sep)) > 1:
             template = env.get_template(path_str)
 
             if not os.path.exists(result_file_dir := os.path.dirname(result_file)):
@@ -86,4 +96,4 @@ def main():
                 os.makedirs(os.path.dirname(result_file), exist_ok=True)
             print("      Write", result_file)
             with open(result_file, "w") as f:
-                f.write(template.render(final_env))
+                f.write(template.render(env_dict))
