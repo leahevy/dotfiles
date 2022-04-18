@@ -142,6 +142,7 @@ osx_packages=(
     homebrew/cask/telegram
     homebrew/cask/teamspeak-client
     homebrew/cask/steam
+    homebrew/cask/battle-net
     homebrew/cask/slack
     homebrew/cask/microsoft-teams
     homebrew/cask/microsoft-remote-desktop
