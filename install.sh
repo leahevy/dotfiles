@@ -107,6 +107,7 @@ packages=(
 )
 
 linux_packages=(
+    curl
     subversion
     bash-completion
     vim
