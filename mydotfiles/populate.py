@@ -3,9 +3,12 @@ import os
 import os.path
 import glob
 import platform
+import sys
 import yaml
 import shutil
 import getpass
+import re
+import xdgappdirs
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
@@ -67,16 +70,23 @@ def main():
 
     final_env = merge_dicts_deep(merge_dicts_deep(private_env, env), global_env)
 
-    process_files(os.path.join(SCRIPT_DIR, "files"), final_env)
+    # Treat any argument to run in dry run
+    dry_run = bool(sys.argv[1:])
+    if dry_run:
+        print("DRY RUN")
+
+    process_files(os.path.join(SCRIPT_DIR, "files"), final_env, dry_run)
 
     if private_dotfiles_location:
-        process_files(os.path.join(private_dotfiles_location, "files"), final_env)
+        process_files(
+            os.path.join(private_dotfiles_location, "files"), final_env, dry_run
+        )
     print(
         "Dotfiles populated (Consider running ~/install.sh to install required packages)"
     )
 
 
-def process_files(files_dir: str, env_dict: dict):
+def process_files(files_dir: str, env_dict: dict, dry_run: bool):
     env = Environment(
         loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
     )
@@ -84,37 +94,68 @@ def process_files(files_dir: str, env_dict: dict):
         print(f"  Processing files in {files_dir}:")
     else:
         print(f"  Processing files in {files_dir} (empty)")
-    for path in sorted(Path(files_dir).rglob("*")):
-        namespace = str(path)[len(files_dir) + 1 :]
-        path_resolved = str(path.resolve())
-        path_str = path_resolved[len(files_dir) + 1 :]
+    for full_path in sorted(Path(files_dir).rglob("*")):
+        full_path = str(full_path.resolve())
+        path_in_files_dir = full_path[len(files_dir) + len(os.sep) :]
+        path_split = path_in_files_dir.split(os.sep)
+        if path_in_files_dir.startswith("_special"):
+            if len(path_split) < 2:
+                continue  # Do not handle special folder directly
+            elif len(path_split) == 2:
+                namespace = os.path.join(*path_split[:2])
+                path_rest = ""
+            else:
+                namespace = os.path.join(*path_split[:2])
+                path_rest = os.path.join(*path_split[2:])
+        elif len(path_split) == 1:
+            namespace = path_split[0]
+            path_rest = ""
+        elif not path_split:
+            raise ValueError("Invalid file context")
+        else:
+            namespace = os.path.join(*path_split[:1])
+            path_rest = os.path.join(*path_split[1:])
 
-        split_path = path_str.split(os.sep)
-        file_path = os.sep.join(split_path[1:])
+        result_dir = os.path.expanduser("~")
 
-        result_file = os.path.join(os.path.expanduser("~"), file_path)
-        if (
-            path.is_dir()
-            and len(namespace.split(os.sep)) == 1
-            and os.listdir(path=path)
-        ):
+        if namespace == os.path.join("_special", "user_config_dir"):
+            result_dir = str(xdgappdirs.user_config_dir())
+        elif namespace.startswith("_special"):
+            raise ValueError(f"Invalid special path: {namespace}")
+
+        result_file = os.path.join(result_dir, path_rest)
+
+        if not path_rest and os.listdir(path=full_path):
             print(f"    Namespace {namespace}:")
-        elif path.is_dir() and len(namespace.split(os.sep)) == 1:
+        elif not path_rest:
             print(f"    Namespace {namespace} (empty)")
-        elif path.is_dir() and len(namespace.split(os.sep)) > 1:
+        elif Path(full_path).is_dir():
             if not os.path.exists(result_file):
                 print("      MakeDir", result_file)
-                os.makedirs(result_file, exist_ok=True)
-        elif path.is_file() and len(namespace.split(os.sep)) > 1:
-            if not os.path.exists(result_file_dir := os.path.dirname(result_file)):
+                if not dry_run:
+                    os.makedirs(result_file, exist_ok=True)
+        elif Path(full_path).is_file():
+            result_file_dir = os.path.dirname(result_file)
+            if not os.path.exists(result_file_dir):
                 print("      MakeDir", result_file_dir)
-                os.makedirs(os.path.dirname(result_file), exist_ok=True)
-            print("      Write", result_file)
-            with open(path, "r") as f:
-                first_line = f.readline().strip()
-                if "jinja2: ignore" in first_line:
-                    shutil.copyfile(path_resolved, result_file)
-                else:
-                    template = env.get_template(path_str)
+                if not dry_run:
+                    os.makedirs(os.path.dirname(result_file), exist_ok=True)
+            print(f"      Write {result_file} (source={full_path})")
+            should_be_copied = False
+            with open(full_path, "r") as f:
+                try:
+                    first_line = f.readline().strip()
+                    should_be_copied = re.match(r".*jinja2:.*ignore.*", first_line)
+                except UnicodeDecodeError:
+                    should_be_copied = True  # Probably binary file
+            if should_be_copied:
+                if not dry_run:
+                    shutil.copyfile(full_path, result_file)
+            else:
+                template = env.get_template(path_in_files_dir)
+                if not dry_run:
                     with open(result_file, "w") as f2:
                         f2.write(template.render(env_dict))
+        else:
+            raise ValueError(f"Unknown file type {full_path}")
+        continue
