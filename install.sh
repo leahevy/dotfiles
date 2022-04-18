@@ -117,6 +117,23 @@ linux_packages=(
     texlive
     docker
     emacs
+    make
+    build-essential
+    libssl-dev
+    zlib1g-dev
+    libbz2-dev
+    libreadline-dev
+    libsqlite3-dev
+    wget
+    curl
+    llvm
+    libncurses5-dev
+    xz-utils
+    tk-dev
+    libxml2-dev
+    libxmlsec1-dev
+    libffi-dev
+    liblzma-dev
 )
 
 osx_packages=(
@@ -165,11 +182,6 @@ fi
 echo "Passwords might be requested during the installation"
 echo
 
-for package in "${packages[@]}"; do
-   package_array=($package)
-   install "${package_array[@]}"
-done
-
 if [ "$OS" == "osx" ]; then
     for package in "${osx_packages[@]}"; do
         package_array=($package)
@@ -181,6 +193,11 @@ elif [ "$OS" == "linux" ]; then
         install "${package_array[@]}"
     done
 fi
+
+for package in "${packages[@]}"; do
+   package_array=($package)
+   install "${package_array[@]}"
+done
 
 echo "Check shells"
 FISH_CMD="$(whereis -b fish | cut -f 2 -d : | xargs)"
