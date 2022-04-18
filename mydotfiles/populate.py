@@ -4,6 +4,7 @@ import os.path
 import glob
 import platform
 import yaml
+import shutil
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
@@ -79,8 +80,8 @@ def process_files(files_dir: str, env_dict: dict):
         print(f"  Processing files in {files_dir} (empty)")
     for path in sorted(Path(files_dir).rglob("*")):
         namespace = str(path)[len(files_dir) + 1 :]
-        path_str = str(path.resolve())
-        path_str = path_str[len(files_dir) + 1 :]
+        path_resolved = str(path.resolve())
+        path_str = path_resolved[len(files_dir) + 1 :]
 
         split_path = path_str.split(os.sep)
         file_path = os.sep.join(split_path[1:])
@@ -99,11 +100,15 @@ def process_files(files_dir: str, env_dict: dict):
                 print("      MakeDir", result_file)
                 os.makedirs(result_file, exist_ok=True)
         elif path.is_file() and len(namespace.split(os.sep)) > 1:
-            template = env.get_template(path_str)
-
             if not os.path.exists(result_file_dir := os.path.dirname(result_file)):
                 print("      MakeDir", result_file_dir)
                 os.makedirs(os.path.dirname(result_file), exist_ok=True)
             print("      Write", result_file)
-            with open(result_file, "w") as f:
-                f.write(template.render(env_dict))
+            with open(path, "r") as f:
+                first_line = f.readline().strip()
+                if "jinja2: ignore" in first_line:
+                    shutil.copyfile(path_resolved, result_file)
+                else:
+                    template = env.get_template(path_str)
+                    with open(result_file, "w") as f2:
+                        f2.write(template.render(env_dict))
