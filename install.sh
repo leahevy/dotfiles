@@ -80,7 +80,6 @@ case $OS in
 esac
 
 packages=(
-    svn
     coreutils
     moreutils
     findutils
@@ -113,6 +112,7 @@ packages=(
 )
 
 linux_packages=(
+    subversion
     bash-completion
     vim
     texlive
@@ -121,6 +121,7 @@ linux_packages=(
 )
 
 osx_packages=(
+    svn
     font-source-code-pro
     bash-completion@2
     iterm2
