@@ -20,6 +20,11 @@ case $OS in
             sudo apt-get install "$@"
             echo
         }
+        finalize() {
+            :
+        }
+        sudo apt-get update
+        sudo apt-get upgrade
         ;;
     'Darwin') 
         OS='osx'
@@ -28,14 +33,24 @@ case $OS in
             brew install "$@"
             echo
         }
+        finalize() {
+            echo "Cleaning up brew"
+            brew cleanup
+            echo
+        }
         if ! command -v brew &> /dev/null; then
             echo "Installing brew"
             sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             echo
+        else
+            echo "Updating brew"
+            brew update
+            echo
+
+            echo "Upgrading packages"
+            brew upgrade
+            echo
         fi
-        echo "Updating brew..."
-        brew update
-        echo
         ;;
     *)
         echo "Install only working on Linux and MacOS"
@@ -44,7 +59,22 @@ case $OS in
 esac
 
 packages=(
+    coreutils
+    moreutils
+    findutils
+    gnu-sed
+    bash
+    bash-completion2
+    wget
+    gnupg
+    vim
+    grep
+    openssh
+    screen
+    ack
     git
+    git-lfs
+    gs
     python3
     htop
     docker
@@ -62,17 +92,22 @@ osx_packages=(
 )
 
 for package in "${packages[@]}"; do
-   install "$package"
+   package_array=($package)
+   install "${package_array[@]}"
 done
 
 if [ "$OS" == "osx" ]; then
     for package in "${osx_packages[@]}"; do
-        install "$package"
+        package_array=($package)
+        echo install "${package_array[@]}"
     done
 elif [ "$OS" == "linux" ]; then
     for package in "${linux_packages[@]}"; do
-        install "$package"
+        package_array=($package)
+        echo install "${package_array[@]}"
     done
 fi
+
+finalize
 
 echo "Everything done"
