@@ -2,6 +2,7 @@
 set -euo pipefail
 
 PYTHON_VERSION=3.10.3
+RUBY_VERSION=3.1.2
 
 echo "mydotfiles install script"
 echo
@@ -20,11 +21,15 @@ case $OS in
         fi
         install() {
             echo "Installing $@"
-            sudo apt-get install "$@"
-            echo
+            if dpkg -l "$1" >/dev/null 2>&1; then
+                sudo apt-get install "$@"
+                echo
+            fi
         }
         finalize() {
-            :
+            echo "Cleaning up packages"
+            sudo apt-get autoremove
+            echo
         }
         sudo apt-get update
         sudo apt-get upgrade
@@ -33,8 +38,10 @@ case $OS in
         OS='osx'
         install() {
             echo "Installing $@"
-            brew install "$@"
-            echo
+            if ! brew list "$1" >/dev/null 2>&1; then
+                brew install "$@"
+                echo
+            fi
         }
         finalize() {
             echo "Cleaning up brew"
@@ -106,6 +113,16 @@ osx_packages=(
     homebrew/cask/docker
 )
 
+# Only run if we are on Linux desktop (not server or Mac)
+if dpkg -l 2>/dev/null | grep xserver-xorg-core >/dev/null 2>&1; then
+    linux_packages+=(
+        firefox
+    )
+fi
+
+echo "Passwords might be requested during the installation"
+echo
+
 for package in "${packages[@]}"; do
    package_array=($package)
    install "${package_array[@]}"
@@ -128,8 +145,16 @@ if ! pyenv versions | grep "$PYTHON_VERSION" >/dev/null 2>&1; then
     echo "Install Python$PYTHON_VERSION with pyenv"
     pyenv install "$PYTHON_VERSION"
     pyenv global "$PYTHON_VERSION"
+    echo
 fi
-echo
+
+echo "Check Ruby installation"
+if ! rbenv versions | grep "$RUBY_VERSION" >/dev/null 2>&1; then
+    echo "Install Ruby$RUBY_VERSION with rbenv"
+    rbenv install "$RUBY_VERSION"
+    rbenv global "$RUBY_VERSION"
+    echo
+fi
 
 finalize
 
