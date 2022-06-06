@@ -20,6 +20,9 @@ if command -v git &> /dev/null
     end
 end
 
+alias nv="nvim -p"
+alias nvim="nvim -p"
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
