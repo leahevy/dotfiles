@@ -87,6 +87,7 @@ def main():
 
 
 def process_files(files_dir: str, env_dict: dict, dry_run: bool):
+    files_dir = os.path.realpath(files_dir)
     env = Environment(
         loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
     )
