@@ -1,6 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
+if [[ ! -e "$HOME/.dotfiles" ]]; then
+    ln -s "$(pwd)" "$HOME/.dotfiles"
+fi
+
 PYTHON_VERSION=3.10.3
 RUBY_VERSION=3.1.2
 
@@ -47,13 +51,6 @@ case $OS in
         DEBIAN_FRONTEND=noninteractive sudo apt-get -qq upgrade
         ;;
     'osx') 
-        install() {
-            echo "Installing $@"
-            if ! brew list "$1" >/dev/null 2>&1; then
-                brew install "$@"
-                echo
-            fi
-        }
         finalize() {
             echo "Cleaning up brew"
             brew cleanup
@@ -74,12 +71,12 @@ case $OS in
         fi
         ;;
     *)
-        echo "Install only working on Linux and MacOS"
+        echo "Install only works on Linux and MacOS"
         exit 1
         ;;
 esac
 
-packages=(
+linux_packages=(
     coreutils
     moreutils
     findutils
@@ -101,9 +98,7 @@ packages=(
     openvpn
     readline
     sqlite3
-)
-
-linux_packages=(
+    npm
     curl
     subversion
     bash-completion
@@ -131,49 +126,6 @@ linux_packages=(
     liblzma-dev
 )
 
-osx_packages=(
-    pyenv
-    pyenv-virtualenv
-    rbenv
-    ruby-build
-    openssh
-    svn
-    font-source-code-pro
-    graphviz
-    bash-completion@2
-    iterm2
-    gnu-sed
-    homebrew/cask/macvim
-    mactex
-    xz
-    zlib
-    homebrew/cask/docker
-    homebrew/cask/emacs
-    homebrew/cask/firefox
-    homebrew/cask/spotify
-    homebrew/cask/discord
-    homebrew/cask/skype
-    homebrew/cask/gimp
-    homebrew/cask/vlc
-    homebrew/cask/visual-studio-code
-    homebrew/cask/balenaetcher
-    homebrew/cask/whatsapp
-    homebrew/cask/the-unarchiver
-    homebrew/cask/telegram
-    homebrew/cask/teamspeak-client
-    homebrew/cask/steam
-    homebrew/cask/battle-net
-    homebrew/cask/slack
-    homebrew/cask/microsoft-teams
-    homebrew/cask/microsoft-remote-desktop
-    homebrew/cask/messenger
-    homebrew/cask/webex-meetings
-    homebrew/cask/adobe-acrobat-reader
-    homebrew/cask/1password
-    homebrew/cask/google-drive
-    homebrew/cask/alfred
-)
-
 # Only run if we are on Linux desktop (not server or Mac)
 if dpkg -l 2>/dev/null | grep xserver-xorg-core >/dev/null 2>&1; then
     linux_packages+=(
@@ -185,55 +137,12 @@ echo "Passwords might be requested during the installation"
 echo
 
 if [ "$OS" == "osx" ]; then
-    for package in "${osx_packages[@]}"; do
-        package_array=($package)
-        install "${package_array[@]}"
-    done
+	brew bundle
 elif [ "$OS" == "linux" ]; then
     for package in "${linux_packages[@]}"; do
         package_array=($package)
         install "${package_array[@]}"
     done
-fi
-
-for package in "${packages[@]}"; do
-   package_array=($package)
-   install "${package_array[@]}"
-done
-
-echo "Check shells"
-FISH_CMD="$(whereis -b fish | cut -f 2 -d : | xargs | cut -f 1 -d " ")"
-if [ "$FISH_CMD" != "" ]; then
-    if [ "$(cat /etc/shells | grep "$FISH_CMD")" = "" ]; then
-        echo "Configure fish as login shell"
-        echo "Set shell to fish"
-        echo "$FISH_CMD" | sudo tee -a /etc/shells
-        sudo chsh -s "$FISH_CMD"
-    fi
-fi
-
-if [ ! -d "$HOME/.local/share/omf" ]; then
-    echo "Install Oh My Fish"
-    curl -L https://get.oh-my.fish | fish
-fi
-
-if [ "$OS" == "osx" ]; then
-    echo "Check Python installation"
-    if ! pyenv versions | grep "$PYTHON_VERSION" >/dev/null 2>&1; then
-        echo "Install Python$PYTHON_VERSION with pyenv"
-        pyenv install "$PYTHON_VERSION"
-        pyenv global "$PYTHON_VERSION"
-        echo
-    fi
-fi
-
-    echo "Check Ruby installation"
-    if ! rbenv versions | grep "$RUBY_VERSION" >/dev/null 2>&1; then
-        echo "Install Ruby$RUBY_VERSION with rbenv"
-        rbenv install "$RUBY_VERSION"
-        rbenv global "$RUBY_VERSION"
-        echo
-    fi
 fi
 
 finalize
