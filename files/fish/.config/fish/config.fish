@@ -11,13 +11,15 @@ if command -v rbenv &> /dev/null
 end
 
 if command -v git &> /dev/null
-    function g
+	set ORIG_GIT /usr/bin/git
+    function git
         if not set -q argv[1]
-            git status
+            $ORIG_GIT status
         else
-            git $argv
+            $ORIG_GIT $argv
         end
     end
+	alias g="git"
 end
 
 alias nv="nvim -p"
