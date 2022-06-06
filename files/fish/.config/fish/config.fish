@@ -24,6 +24,8 @@ end
 
 alias nv="nvim -p"
 alias nvim="nvim -p"
+alias vim="nvim -p"
+alias vi="nvim -p"
 alias n="neovide --frame None"
 
 if status is-interactive
