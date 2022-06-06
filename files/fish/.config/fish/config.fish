@@ -28,6 +28,8 @@ alias vim="nvim -p"
 alias vi="nvim -p"
 alias n="neovide --frame None"
 
+fish_add_path ~/bin
+
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
