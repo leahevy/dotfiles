@@ -2,6 +2,7 @@
 .DS_Store
 .AppleDouble
 .LSOverride
+Icon
 
 # Thumbnails
 ._*
@@ -18,12 +19,38 @@ Temporary Items
 .apdisk
 {% endif %}
 
-# vi
+# vi/vim
 *~
+*.un~
+Session.vim
+.netrwhist
+
+# Emacs
+.\#*
 
 # Thumbnail cache files
 ._*
 Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
 
-# Compiled Python files
-*.pyc
+# Python
+__pycache__/
+*.py[cod]
+pyrightconfig.json
+pip-log.txt
+
+# General
+dist/
+eggs/
+sdist/
+*.egg-info
+*.egg
+*.mo
+.coverage
+.cache
+coverage.xml
+
+# Sphinx documentation
+docs/_build/
