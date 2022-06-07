@@ -53,16 +53,16 @@
 [core]
   	# pager = cat
   	excludesfile = ~/.gitignore_global
-  	editor = code --wait
+  	editor = nvim -p
   	whitespace = -trailing-space
 [diff]
   	mnemonicPrefix = true
   	renames = true
   	wordRegex = .
   	submodule = log
-  	tool = vscode
-[difftool "vscode"]
-	cmd = code --wait --diff $LOCAL $REMOTE
+  	tool = nvim
+[difftool "nvim"]
+	cmd = nvim -p -d $LOCAL $REMOTE
 [fetch]
   	recurseSubmodules = on-demand
 [grep]
