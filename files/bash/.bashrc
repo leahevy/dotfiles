@@ -1,5 +1,6 @@
 export PAGER="less"
-export EDITOR="nvim"
+export EDITOR="nvim -p"
+export VISUAL="nvim -p"
 
 {% if (global["os"] == "osx") %}
 export BROWSER="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
@@ -36,9 +37,9 @@ alias rm='rm -I'
 alias cp='cp -i'
 alias mv='mv -i'
 alias ln='ln -i'
-alias chown='chown --preserve-root'
-alias chmod='chmod --preserve-root'
-alias chgrp='chgrp --preserve-root'
+alias chown='chown'
+alias chmod='chmod'
+alias chgrp='chgrp'
 
 alias mkdir='mkdir -pv'
 alias h='history'
