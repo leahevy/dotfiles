@@ -128,5 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Brew
-/Brewfile.lock.json
+# Tmp
+/.tmp
