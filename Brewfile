@@ -60,9 +60,7 @@ brew "tmux"
 brew "wget"
 brew "xclip"
 brew "zlib"
-cask "1password"
 cask "adobe-acrobat-reader"
-cask "alacritty"
 cask "alfred"
 cask "amethyst"
 cask "balenaetcher"
@@ -95,7 +93,6 @@ cask "teamspeak-client"
 cask "telegram"
 cask "the-unarchiver"
 cask "vlc"
-cask "webex-meetings"
 cask "whatsapp"
 mas "AdBlock", id: 1402042596
 mas "Agenda", id: 1287445660
@@ -106,14 +103,12 @@ mas "Evernote", id: 406056744
 mas "Fluent Reader", id: 1520907427
 mas "HazeOver", id: 430798174
 mas "HiddenMe", id: 467040476
-mas "iMovie", id: 408981434
 mas "Keynote", id: 409183694
 mas "Microsoft Excel", id: 462058435
 mas "Microsoft Outlook", id: 985367838
 mas "Microsoft PowerPoint", id: 462062816
 mas "Microsoft Word", id: 462054704
 mas "MoneyStats", id: 1501042913
-mas "Notability", id: 360593530
 mas "Numbers", id: 409203825
 mas "Pages", id: 409201541
 mas "Scrivener", id: 1310686187
