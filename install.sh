@@ -115,10 +115,17 @@ if [ "$OS" == "linux" ]; then
     DEBIAN_FRONTEND=noninteractive sudo apt-get -qq autoremove
 fi
 
+echo "Dotfiles"
+read -p "Populate dotfiles now? [y?]" answerdotfiles
+if [[ "$answerdotfiles" == "y" ]]; then
+    mydotfiles
+fi
+
+
 if [ "$OS" == "osx" ]; then
     echo "MacOS defaults"
-    read -p "Configure? [y?]" answer
-    if [[ "$answer" == "y" ]]; then
+    read -p "Configure? [y?]" answermacos
+    if [[ "$answermacos" == "y" ]]; then
         ./macos.sh
     fi
 fi
