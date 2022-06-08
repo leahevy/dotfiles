@@ -62,3 +62,11 @@ alias o="open"
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
+
+{% if (global["os"] == "osx") %}
+export HOMEBREW_PATH="/opt/homebrew/bin"
+{% else %}
+export HOMEBREW_PATH="/home/linuxbrew/.linuxbrew/bin"
+{% endif %}
+
+export PATH="$PATH:$HOMEBREW_PATH:/usr/local/bin:$HOME/bin"
