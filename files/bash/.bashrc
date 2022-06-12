@@ -69,4 +69,4 @@ export HOMEBREW_PATH="/opt/homebrew/bin"
 export HOMEBREW_PATH="/home/linuxbrew/.linuxbrew/bin"
 {% endif %}
 
-export PATH="$PATH:$HOMEBREW_PATH:/usr/local/bin:$HOME/bin"
+export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$PATH"
