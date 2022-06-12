@@ -6,6 +6,9 @@
 [user]
 	name = {{ private['git']['name'] }}
 	email = {{ private['git']['mail'] }}
+    {% if private['git']['signingkey'] %}
+    signingkey = {{ private['git']['signingkey'] }}
+    {% endif %}
 [pull]
 	rebase = false
 [color]
@@ -103,3 +106,7 @@
   	prereleaseSuffix = .beta
   	prereleaseSuffix = -rc
   	prereleaseSuffix = .rc
+[commit]
+{% if private['git']['signingkey'] %}
+    gpgsign = true
+{% endif %}
