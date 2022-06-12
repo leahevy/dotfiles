@@ -9,6 +9,8 @@ import shutil
 import getpass
 import re
 import xdgappdirs
+import tempfile
+from distutils.dir_util import copy_tree
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 import typer
@@ -75,19 +77,24 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
     if dry_run:
         print("DRY RUN")
 
-    process_files(os.path.join(SCRIPT_DIR, "files"), final_env, dry_run)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        if dry_run:
+            tmpdirname = "~/"
+        process_files(os.path.join(SCRIPT_DIR, "files"), tmpdirname, final_env, dry_run)
+        if private_dotfiles_location:
+            process_files(
+                os.path.join(private_dotfiles_location, "files"), tmpdirname, final_env, dry_run
+            )
+        if not dry_run:
+            copy_tree(tmpdirname, os.path.expanduser("~"))
 
-    if private_dotfiles_location:
-        process_files(
-            os.path.join(private_dotfiles_location, "files"), final_env, dry_run
-        )
     if not dry_run:
         print(
             "Dotfiles populated (Consider running ~/install.sh to install required packages)"
         )
 
 
-def process_files(files_dir: str, env_dict: dict, dry_run: bool):
+def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool):
     files_dir = os.path.realpath(files_dir)
     env = Environment(
         loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
@@ -118,7 +125,7 @@ def process_files(files_dir: str, env_dict: dict, dry_run: bool):
             namespace = os.path.join(*path_split[:1])
             path_rest = os.path.join(*path_split[1:])
 
-        result_dir = os.path.expanduser("~")
+        result_dir = target_dir
 
         if namespace == os.path.join("_special", "user_config_dir"):
             result_dir = str(xdgappdirs.user_config_dir())
