@@ -10,7 +10,6 @@ import getpass
 import re
 import xdgappdirs
 import tempfile
-from distutils.dir_util import copy_tree
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 import typer
@@ -38,46 +37,54 @@ def genkey():
 
 
 @app.command()
-def encryptfile(filename: Path = typer.Argument(..., exists=True, readable=True, writable=True)):
-    filename: str = str(filename)
+def encryptfile(filenames: list[str], dont_remove_original: bool = typer.Option(False, "-n", "--no-rm", help="Don't remove the original file")):
+    for filename in filenames:
+        if not os.path.exists(filename):
+            raise ValueError(f"File {filename} does not exist")
 
-    key = load_key()
-    if not key:
-        raise ValueError("No key configured")
-            
-    with open(filename, "rb") as file:
-        file_data = file.read()
+    for filename in filenames:
+        key = load_key()
+        if not key:
+            raise ValueError("No key configured")
+                
+        with open(filename, "rb") as file:
+            file_data = file.read()
 
-    file_data = key.encrypt(file_data)
+        file_data = key.encrypt(file_data)
 
-    with open(filename + ".encrypted", "wb") as file:
-        file.write(file_data)
+        with open(filename + ".encrypted", "wb") as file:
+            file.write(file_data)
 
-    shutil.copystat(filename, filename + ".encrypted")
-    os.remove(filename)
+        shutil.copystat(filename, filename + ".encrypted")
+        if not dont_remove_original:
+            os.remove(filename)
 
 
 @app.command()
-def decryptfile(filename: Path = typer.Argument(..., exists=True, readable=True, writable=True)):
-    filename: str = str(filename)
+def decryptfile(filenames: list[str], dont_remove_original: bool = typer.Option(False, "-n", "--no-rm", help="Don't remove the original file")):
+    for filename in filenames:
+        if not os.path.exists(filename):
+            raise ValueError(f"File {filename} does not exist")
 
-    key = load_key()
-    if not key:
-        raise ValueError("No key configured")
-            
-    with open(filename, "rb") as file:
-        file_data = file.read()
+    for filename in filenames:
+        key = load_key()
+        if not key:
+            raise ValueError("No key configured")
+                
+        with open(filename, "rb") as file:
+            file_data = file.read()
 
-    file_data = key.decrypt(file_data)
+        file_data = key.decrypt(file_data)
 
-    orig_filename = filename
-    filename = re.sub(r"\.encrypted$", "", filename)
+        orig_filename = filename
+        filename = re.sub(r"\.encrypted$", "", filename)
 
-    with open(filename, "wb") as file:
-        file.write(file_data)
+        with open(filename, "wb") as file:
+            file.write(file_data)
 
-    shutil.copystat(orig_filename, filename)
-    os.remove(orig_filename)
+        shutil.copystat(orig_filename, filename)
+        if not dont_remove_original:
+            os.remove(orig_filename)
 
 
 def load_key():
@@ -154,7 +161,7 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
                 os.path.join(private_dotfiles_location, "files"), tmpdirname, final_env, dry_run
             )
         if not dry_run:
-            copy_tree(tmpdirname, os.path.expanduser("~"))
+            copytree(tmpdirname, os.path.expanduser("~"))
 
         new_files = [f.replace(tmpdirname, "") for f in new_files]
         new_files = [re.sub("^~/", "", f) for f in new_files]
@@ -166,6 +173,10 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
         print(
             "Dotfiles populated (Consider running ~/install.sh to install required packages)"
         )
+
+
+def copytree(src, dst):
+    shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 def remove_nonexisting_from_target(filenames_new, targetdir, dry_run=False):
@@ -194,9 +205,6 @@ def remove_nonexisting_from_target(filenames_new, targetdir, dry_run=False):
 def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool) -> list[str]:
     new_files = []
     files_dir = os.path.realpath(files_dir)
-    env = Environment(
-        loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
-    )
     if glob.glob(os.path.join(files_dir, "*")):
         print(f"  Processing files in {files_dir}:")
     else:
@@ -245,43 +253,80 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
                 print("      MakeDir", result_file)
                 if not dry_run:
                     os.makedirs(result_file, exist_ok=True)
+                    shutil.copystat(full_path, result_file)
         elif Path(full_path).is_file():
             result_file_dir = os.path.dirname(result_file)
             if not os.path.exists(result_file_dir):
                 print("      MakeDir", result_file_dir)
                 if not dry_run:
                     os.makedirs(os.path.dirname(result_file), exist_ok=True)
+                    shutil.copystat(os.path.dirname(full_path), os.path.dirname(result_file))
+
             print(f"      Write {result_file} (source={full_path})")
+            isbinary = False
             if result_file.endswith(".encrypted"):
-                new_files.append(re.sub(r"\.encrypted$", "", result_file))
-            else:
-                new_files.append(result_file)
-            should_be_copied = False
-            with open(full_path, "r") as f:
+                result_file = re.sub(r"\.encrypted$", "", result_file)
+                unencrypted_path = re.sub(r"\.encrypted$", "", full_path)
                 try:
-                    first_line = f.readline().strip()
+                    decryptfile([full_path], dont_remove_original=True)
+                    try:
+                        with open(unencrypted_path, "r") as unencrypted_file:
+                            file_data = unencrypted_file.read()
+                    except UnicodeDecodeError:
+                        isbinary = True
+                        with open(unencrypted_path, "rb") as unencrypted_file:
+                            file_data = unencrypted_file.read()
+                finally:
+                    try:
+                        os.remove(unencrypted_path)
+                    except:
+                        pass
+            else:
+                try:
+                    with open(full_path, "r") as orig_file:
+                        file_data = orig_file.read()
+                except UnicodeDecodeError:
+                    isbinary = True
+                    with open(full_path, "rb") as orig_file:
+                        file_data = orig_file.read()
+            new_files.append(result_file)
+
+            should_be_copied = True
+            remove_first_line = False
+            if not isbinary:
+                file_data_lines = file_data.split("\n")
+                if len(file_data_lines) > 0:
+                    first_line = file_data_lines[0].strip()
                     should_be_copied = re.match(r".*jinja2:\s*ignore.*", first_line)
                     remove_first_line = True
-                except UnicodeDecodeError:
-                    should_be_copied = True  # Probably binary file
-                    remove_first_line = False
+
             if should_be_copied:
                 if not dry_run:
-                    shutil.copyfile(full_path, result_file)
+                    flags = "wb" if isbinary else "w"
+                    with open(result_file, flags) as result_file_handler:
+                        result_file_handler.write(file_data)
                     if remove_first_line:
                         with open(result_file, 'r') as fin:
                             data = fin.read().splitlines(True)
                         with open(result_file, 'w') as fout:
                             fout.writelines(data[1:])
             else:
-                template = env.get_template(path_in_files_dir)
-                if not dry_run:
-                    with open(result_file, "w") as f2:
-                        f2.write(template.render(env_dict))
+                with tempfile.TemporaryDirectory() as tmpdirname:
+                    templatepath = os.path.join(tmpdirname, os.path.basename(full_path))
+                    with open(templatepath, "w") as templatepath_file:
+                        templatepath_file.write(file_data)
+
+                    env = Environment(
+                        loader=FileSystemLoader(tmpdirname), trim_blocks=True, lstrip_blocks=True
+                    )
+
+                    template = env.get_template(os.path.basename(templatepath))
+                    if not dry_run:
+                        with open(result_file, "w") as f2:
+                            f2.write(template.render(env_dict))
+
             if not dry_run:
                 shutil.copystat(full_path, result_file)
-                if result_file.endswith(".encrypted"):
-                    decryptfile(Path(result_file))
         else:
             raise ValueError(f"Unknown file type {full_path}")
         continue
