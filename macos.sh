@@ -288,28 +288,54 @@ defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 # Kill affected applications                                                  #
 ###############################################################################
 
-for app in "Activity Monitor" \
-	"Address Book" \
-	"Calendar" \
-	"cfprefsd" \
-	"Contacts" \
-	"Dock" \
-	"Finder" \
-	"Google Chrome Canary" \
-	"Google Chrome" \
-	"Mail" \
-	"Messages" \
-	"Opera" \
-	"Photos" \
-	"Safari" \
-	"SizeUp" \
-	"Spectacle" \
-	"SystemUIServer" \
-	"Terminal" \
-	"Transmission" \
-	"Tweetbot" \
-	"Twitter" \
-	"iCal"; do
-	pkill "${app}" 1>/dev/null 2>&1 || true
+TO_KILL=(
+    "Activity Monitor"
+    "Address Book"
+    "Calendar"
+    "cfprefsd"
+    "Contacts"
+    "Dock"
+    "Finder"
+    "Google Chrome Canary"
+    "Google Chrome"
+    "Mail"
+    "Messages"
+    "Opera"
+    "Photos"
+    "Safari"
+    "SizeUp"
+    "Spectacle"
+    "SystemUIServer"
+    "Terminal"
+    "Transmission"
+    "Tweetbot"
+    "Twitter"
+    "iCal"
+)
+
+TO_RESTART=(
+    "Google Chrome Canary"
+    "Google Chrome"
+)
+
+KILLED=()
+
+for app in "${TO_KILL[@]}"; do
+    if pgrep -x "${app}" >/dev/null; then
+        echo "Killing ${app}..."
+        pgrep -x "${app}" >/dev/null && pkill "${app}" 1>/dev/null 2>&1 || true
+        KILLED+=("${app}")
+    fi
 done
+
+sleep 3
+
+if (( ${#KILLED[@]} )); then
+    for app in "${TO_RESTART[@]}"; do
+        if [[ " ${KILLED[*]} " =~ " ${app} " ]]; then
+            echo "Restarting ${app}..."
+            open "/Applications/${app}.app" || true
+        fi
+    done
+fi
 echo "Done. Note that some of these changes require a logout/restart to take effect."
