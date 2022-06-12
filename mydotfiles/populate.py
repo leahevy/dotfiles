@@ -184,7 +184,9 @@ def write_config(env, targetfile):
         json.dump(env, f, ensure_ascii=False, indent=4)
     os.chmod(targetfile, 0o600)
 
+
 def copytree(src, dst):
+    print(f"Copy generated files to {dst}")
     shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
