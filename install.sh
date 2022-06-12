@@ -11,22 +11,22 @@ NC='\033[0m'
 function echo() {
     printf "${GREEN}>>> ${RED}${@}${NC}\n"
     printf "${GREEN}"
-	printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-	printf "${NC}"
+    printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+    printf "${NC}"
 }
 
 function fatal() {
     printf "${RED}"
-	printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-	printf "${NC}"
+    printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
+    printf "${NC}"
     printf "${RED}!!! ${RED}${@}!${NC}\n" >&2
-	exit 1
+    exit 1
 }
 
 echo "Installing dotfiles ($SCRIPTPATH)"
 
 if ! command -v pip &> /dev/null; then
-	fatal "pip not found on system"
+    fatal "pip not found on system"
 fi
 
 echo "Installing mydotfiles Python package locally"
@@ -67,6 +67,15 @@ if [ "$OS" == "linux" ]; then
     fi
 fi
 
+if [ "$OS" == "linux" ]; then
+    SNAP_AVAILABLE=0
+    if systemctl status >/dev/null 2>/dev/null; then
+        if snap version >/dev/null 2>/dev/null; then
+            SNAP_AVAILABLE=1
+        fi
+    fi
+fi
+
 echo "Starting installation\nPasswords might be requested during the installation"
 
 echo "Check for Homebrew installation"
@@ -87,14 +96,32 @@ if [ "$OS" == "linux" ]; then
 
     echo "Upgrading linux packages"
     DEBIAN_FRONTEND=noninteractive sudo apt-get -qq upgrade
+
+    if (( SNAP_AVAILABLE )); then
+        echo "Updating snap packages"
+        sudo snap refresh
+    fi
 fi
 
 
 if [ "$OS" == "linux" ]; then
     echo "Installing linux packages"
     for package in "${linux_packages[@]}"; do
-        package_array=($package)
-        DEBIAN_FRONTEND=noninteractive sudo apt-get install -qq "${package_array[@]}"
+        cmd="$(cut -d ' ' -f 1 <<< "$package" )"
+        name="$( cut -d ' ' -f 2- <<< "$package" | tr -d '"')"
+        case "$cmd" in
+            'pkg')
+                DEBIAN_FRONTEND=noninteractive sudo apt-get install -qq "$name"
+                ;;
+            'snap')
+                if (( SNAP_AVAILABLE )); then
+                    DEBIAN_FRONTEND=noninteractive sudo snap install "$name"
+                fi
+                ;;
+            *)
+                fatal "Invalid package command found for linux package: $cmd"
+                ;;
+        esac
     done
 fi
 
@@ -102,8 +129,11 @@ echo "Installing packages using Homebrew"
 mkdir -p .tmp
 cp Brewfile .tmp/
 if [ "$OS" == "linux" ]; then
-    sed -i '' '/^cask /d' .tmp/Brewfile
-    sed -i '' '/^mas /d' .tmp/Brewfile
+    sed -i '/^cask /d' .tmp/Brewfile
+    sed -i '/^mas /d' .tmp/Brewfile
+    sed -i '/^brew "mas"/d' .tmp/Brewfile
+    sed -i '/^tap "homebrew\/cask"/d' .tmp/Brewfile
+    sed -i '/^tap "homebrew\/cask-fonts"/d' .tmp/Brewfile
 fi
 (cd .tmp; brew bundle)
 

@@ -10,9 +10,4 @@ if status is-interactive
 	    end
 		alias g="git"
 	end
-
-	alias nv="$VISUAL"
-	alias nvim="$VISUAL"
-	alias vim="$VISUAL"
-	alias vi="$VISUAL"
 end

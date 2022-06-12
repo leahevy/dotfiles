@@ -1,2 +1,4 @@
-firefox
-chrome
+pkg "firefox"
+snap "chromium-browser"
+snap "chromium-codecs-ffmpeg"
+snap "chromium-codecs-ffmpeg-extra"

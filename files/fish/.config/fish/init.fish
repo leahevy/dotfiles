@@ -7,5 +7,10 @@ if command -v pyenv &> /dev/null
 end
 
 if command -v rbenv &> /dev/null
+    set -gx GEM_HOME "$HOME/.gems"
     status --is-interactive; and rbenv init - fish | source
+end
+
+if test "$(umask)" = "0000"
+    umask 027
 end

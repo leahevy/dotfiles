@@ -157,6 +157,8 @@ def process_files(files_dir: str, env_dict: dict, dry_run: bool):
                 if not dry_run:
                     with open(result_file, "w") as f2:
                         f2.write(template.render(env_dict))
+            if not dry_run:
+                shutil.copystat(full_path, result_file)
         else:
             raise ValueError(f"Unknown file type {full_path}")
         continue
