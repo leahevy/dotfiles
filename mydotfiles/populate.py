@@ -11,6 +11,7 @@ import re
 import xdgappdirs
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
+import typer
 
 
 SCRIPT_DIR = os.path.join(os.path.expanduser("~/.dotfiles"))
@@ -18,7 +19,7 @@ FILES_DIR = os.path.join(SCRIPT_DIR, "files")
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "environment.yml")
 
 
-def main():
+def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't do anything")):
     print("mydotfiles:")
     _system = platform.system().lower()
 
@@ -71,7 +72,6 @@ def main():
     final_env = merge_dicts_deep(merge_dicts_deep(private_env, env), global_env)
 
     # Treat any argument to run in dry run
-    dry_run = bool(sys.argv[1:])
     if dry_run:
         print("DRY RUN")
 
@@ -81,9 +81,10 @@ def main():
         process_files(
             os.path.join(private_dotfiles_location, "files"), final_env, dry_run
         )
-    print(
-        "Dotfiles populated (Consider running ~/install.sh to install required packages)"
-    )
+    if not dry_run:
+        print(
+            "Dotfiles populated (Consider running ~/install.sh to install required packages)"
+        )
 
 
 def process_files(files_dir: str, env_dict: dict, dry_run: bool):
@@ -169,3 +170,11 @@ def process_files(files_dir: str, env_dict: dict, dry_run: bool):
         else:
             raise ValueError(f"Unknown file type {full_path}")
         continue
+
+
+def main():
+    typer.run(populate)
+
+
+if __name__ == "__main__":
+    main()
