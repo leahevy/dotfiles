@@ -87,13 +87,21 @@ if ! command -v brew &> /dev/null; then
         sudo git clone https://github.com/Homebrew/brew /usr/local/homebrew
         sudo chown -R "$USER" /usr/local/homebrew
     fi
-else
-    echo "Updating brew packages"
-    brew update
-
-    echo "Upgrading brew packages"
-    brew upgrade
 fi
+
+function brew() {
+    if [ "$OS" == "linux" ]; then
+        /home/linuxbrew/.linuxbrew/bin/brew "$@"
+    else
+        arch -arm64 /opt/homebrew/bin/brew "$@"
+    fi
+}
+
+echo "Updating brew packages"
+brew update
+
+echo "Upgrading brew packages"
+brew upgrade
 
 if [ "$OS" == "linux" ]; then
     echo "Updating linux packages"
