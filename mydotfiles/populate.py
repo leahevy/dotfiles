@@ -146,7 +146,7 @@ def process_files(files_dir: str, env_dict: dict, dry_run: bool):
             with open(full_path, "r") as f:
                 try:
                     first_line = f.readline().strip()
-                    should_be_copied = re.match(r".*jinja2:.*ignore.*", first_line)
+                    should_be_copied = re.match(r".*jinja2:\s*ignore.*", first_line)
                     remove_first_line = True
                 except UnicodeDecodeError:
                     should_be_copied = True  # Probably binary file
