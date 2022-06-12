@@ -148,7 +148,7 @@ fi
 echo "Dotfiles"
 read -p "Populate dotfiles now? [y?]" answerdotfiles
 if [[ "$answerdotfiles" == "y" ]]; then
-    mydotfiles
+    mydotfiles populate
 fi
 
 

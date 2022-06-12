@@ -14,7 +14,7 @@ To install the required packages run `~/.dotfiles/install.sh`.
 
 It can be simply used by installing the python package with `pip install -e .` which will install all dependencies.
 
-Then run `mydotfiles` to install the dotfiles.
+Then run `mydotfiles populate` to install the dotfiles.
 
 It requires additionally a private dotfile folder (`~/.dotfiles-private` per default, but changeable) with private or machine dependent settings.
 

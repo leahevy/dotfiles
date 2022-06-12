@@ -3,3 +3,4 @@ MarkupSafe
 PyYAML
 xdgappdirs
 typer
+cryptography

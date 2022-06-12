@@ -14,13 +14,80 @@ from distutils.dir_util import copy_tree
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 import typer
+from cryptography.fernet import Fernet
+
+
+app = typer.Typer()
 
 
 SCRIPT_DIR = os.path.join(os.path.expanduser("~/.dotfiles"))
 FILES_DIR = os.path.join(SCRIPT_DIR, "files")
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "environment.yml")
 
+KEY_PATH = os.path.expanduser("~/.mydotfiles.key")
 
+
+@app.command()
+def genkey():
+    if os.path.exists(KEY_PATH):
+        raise ValueError(f"Key already exists: {KEY_PATH}")
+    key = Fernet.generate_key()
+    with open(KEY_PATH, "wb") as key_file:
+        key_file.write(key)
+    os.chmod(KEY_PATH, 0o600)
+
+
+@app.command()
+def encryptfile(filename: Path = typer.Argument(..., exists=True, readable=True, writable=True)):
+    filename: str = str(filename)
+
+    key = load_key()
+    if not key:
+        raise ValueError("No key configured")
+            
+    with open(filename, "rb") as file:
+        file_data = file.read()
+
+    file_data = key.encrypt(file_data)
+
+    with open(filename + ".encrypted", "wb") as file:
+        file.write(file_data)
+
+    shutil.copystat(filename, filename + ".encrypted")
+    os.remove(filename)
+
+
+@app.command()
+def decryptfile(filename: Path = typer.Argument(..., exists=True, readable=True, writable=True)):
+    filename: str = str(filename)
+
+    key = load_key()
+    if not key:
+        raise ValueError("No key configured")
+            
+    with open(filename, "rb") as file:
+        file_data = file.read()
+
+    file_data = key.decrypt(file_data)
+
+    orig_filename = filename
+    filename = re.sub(r"\.encrypted$", "", filename)
+
+    with open(filename, "wb") as file:
+        file.write(file_data)
+
+    shutil.copystat(orig_filename, filename)
+    os.remove(orig_filename)
+
+
+def load_key():
+    if os.path.exists(KEY_PATH):
+        with open(KEY_PATH, "rb") as f:
+            return Fernet(f.read())
+    return None
+    
+
+@app.command()
 def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't do anything")):
     print("mydotfiles:")
     _system = platform.system().lower()
@@ -185,7 +252,10 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
                 if not dry_run:
                     os.makedirs(os.path.dirname(result_file), exist_ok=True)
             print(f"      Write {result_file} (source={full_path})")
-            new_files.append(result_file)
+            if result_file.endswith(".encrypted"):
+                new_files.append(re.sub(r"\.encrypted$", "", result_file))
+            else:
+                new_files.append(result_file)
             should_be_copied = False
             with open(full_path, "r") as f:
                 try:
@@ -210,6 +280,8 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
                         f2.write(template.render(env_dict))
             if not dry_run:
                 shutil.copystat(full_path, result_file)
+                if result_file.endswith(".encrypted"):
+                    decryptfile(Path(result_file))
         else:
             raise ValueError(f"Unknown file type {full_path}")
         continue
@@ -217,7 +289,7 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
 
 
 def main():
-    typer.run(populate)
+    app()
 
 
 if __name__ == "__main__":
