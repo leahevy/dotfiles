@@ -3,8 +3,8 @@ import os
 import os.path
 import glob
 import platform
-import sys
 import yaml
+import json
 import shutil
 import getpass
 import re
@@ -169,11 +169,19 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
 
         remove_nonexisting_from_target(new_files, os.path.expanduser("~"), dry_run=dry_run)
 
+        if not dry_run:
+            write_config(final_env,
+                         os.path.join(os.path.expanduser("~"), ".mydotfiles.conf.json"))
+
     if not dry_run:
         print(
             "Dotfiles populated (Consider running ~/install.sh to install required packages)"
         )
 
+def write_config(env, targetfile):
+    print(f"Write used configuration to home dir: {targetfile}")
+    with open(targetfile, 'w', encoding='utf-8') as f:
+        json.dump(env, f, ensure_ascii=False, indent=4)
 
 def copytree(src, dst):
     shutil.copytree(src, dst, dirs_exist_ok=True)
