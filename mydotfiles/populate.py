@@ -182,6 +182,7 @@ def write_config(env, targetfile):
     print(f"Write used configuration to home dir: {targetfile}")
     with open(targetfile, 'w', encoding='utf-8') as f:
         json.dump(env, f, ensure_ascii=False, indent=4)
+    os.chmod(targetfile, 0o600)
 
 def copytree(src, dst):
     shutil.copytree(src, dst, dirs_exist_ok=True)
