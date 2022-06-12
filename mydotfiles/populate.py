@@ -209,6 +209,7 @@ def remove_nonexisting_from_target(filenames_new, targetdir, dry_run=False):
         with open(datafilename, "w") as f:
             for file in filenames_new:
                 f.write(f"{file}\n")
+        os.chmod(datafilename, 0o600)
 
 
 def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool) -> list[str]:
