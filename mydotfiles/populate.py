@@ -147,11 +147,18 @@ def process_files(files_dir: str, env_dict: dict, dry_run: bool):
                 try:
                     first_line = f.readline().strip()
                     should_be_copied = re.match(r".*jinja2:.*ignore.*", first_line)
+                    remove_first_line = True
                 except UnicodeDecodeError:
                     should_be_copied = True  # Probably binary file
+                    remove_first_line = False
             if should_be_copied:
                 if not dry_run:
                     shutil.copyfile(full_path, result_file)
+                    if remove_first_line:
+                        with open(result_file, 'r') as fin:
+                            data = fin.read().splitlines(True)
+                        with open(result_file, 'w') as fout:
+                            fout.writelines(data[1:])
             else:
                 template = env.get_template(path_in_files_dir)
                 if not dry_run:
