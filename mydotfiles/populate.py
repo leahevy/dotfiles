@@ -27,7 +27,7 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
 
     if _system == "darwin":
         _system = "osx"
-    print(f"  Running on sytem: {_system}")
+    print(f"  Running on sytem: {_system.upper()}")
 
     global_env = {
         "global": {
