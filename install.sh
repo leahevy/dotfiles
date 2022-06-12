@@ -82,6 +82,11 @@ echo "Check for Homebrew installation"
 if ! command -v brew &> /dev/null; then
     echo "Installing brew"
     sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    if [ "$OS" == "osx" ]; then
+        sudo git clone https://github.com/Homebrew/brew /usr/local/homebrew
+        sudo chown -R "$USER" /usr/local/homebrew
+    fi
 else
     echo "Updating brew packages"
     brew update
