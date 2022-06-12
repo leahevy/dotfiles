@@ -79,14 +79,21 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         if dry_run:
-            tmpdirname = "~/"
-        process_files(os.path.join(SCRIPT_DIR, "files"), tmpdirname, final_env, dry_run)
+            tmpdirname = os.path.expanduser("~")
+        new_files = []
+        new_files += process_files(os.path.join(SCRIPT_DIR, "files"), tmpdirname, final_env, dry_run)
         if private_dotfiles_location:
-            process_files(
+            new_files += process_files(
                 os.path.join(private_dotfiles_location, "files"), tmpdirname, final_env, dry_run
             )
         if not dry_run:
             copy_tree(tmpdirname, os.path.expanduser("~"))
+
+        new_files = [f.replace(tmpdirname, "") for f in new_files]
+        new_files = [re.sub("^~/", "", f) for f in new_files]
+        new_files = [re.sub("^/", "", f) for f in new_files]
+
+        remove_nonexisting_from_target(new_files, os.path.expanduser("~"), dry_run=dry_run)
 
     if not dry_run:
         print(
@@ -94,7 +101,31 @@ def populate(dry_run: bool = typer.Option(False, "-n", "--dry-run", help="Don't 
         )
 
 
-def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool):
+def remove_nonexisting_from_target(filenames_new, targetdir, dry_run=False):
+    datafilename = os.path.join(targetdir, ".mydotfiles-populate-last.txt")
+    if os.path.exists(datafilename):
+        print("Checking files for removal...")
+        filenames_last = []
+        with open(datafilename, "r") as f:
+            lines = f.read().split("\n")
+            for line in lines:
+                if line.strip():
+                    filenames_last.append(line.strip())
+        for file in filenames_last:
+            if file not in filenames_new:
+                if os.path.exists(os.path.join(targetdir, file)):
+                    print(f"  Remove file: '{os.path.join(targetdir, file)}'")
+                    if not dry_run:
+                        os.remove(os.path.join(targetdir, file))
+
+    if not dry_run:
+        with open(datafilename, "w") as f:
+            for file in filenames_new:
+                f.write(f"{file}\n")
+
+
+def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool) -> list[str]:
+    new_files = []
     files_dir = os.path.realpath(files_dir)
     env = Environment(
         loader=FileSystemLoader(files_dir), trim_blocks=True, lstrip_blocks=True
@@ -128,7 +159,11 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
         result_dir = target_dir
 
         if namespace == os.path.join("_special", "user_config_dir"):
-            result_dir = str(xdgappdirs.user_config_dir())
+            home_dir = os.path.expanduser("~")
+            user_config_dir = xdgappdirs.user_config_dir()
+            if not user_config_dir.startswith(home_dir):
+                raise ValueError(f"Cannot create special files in user config dir: {user_config_dir}")
+            result_dir = user_config_dir.replace(home_dir, result_dir)
         elif namespace.startswith("_special"):
             raise ValueError(f"Invalid special path: {namespace}")
 
@@ -150,6 +185,7 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
                 if not dry_run:
                     os.makedirs(os.path.dirname(result_file), exist_ok=True)
             print(f"      Write {result_file} (source={full_path})")
+            new_files.append(result_file)
             should_be_copied = False
             with open(full_path, "r") as f:
                 try:
@@ -177,6 +213,7 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
         else:
             raise ValueError(f"Unknown file type {full_path}")
         continue
+    return new_files
 
 
 def main():
