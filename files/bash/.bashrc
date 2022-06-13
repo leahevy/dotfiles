@@ -1,6 +1,6 @@
 export PAGER="less"
-export EDITOR="nvim -p"
-export VISUAL="nvim -p"
+export EDITOR="nvim"
+export VISUAL="nvim"
 
 {% if (global["os"] == "osx") %}
 export BROWSER="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
@@ -8,10 +8,10 @@ export BROWSER="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 export BROWSER="chrome"
 {% endif %}
 
-alias nv="nvim -p"
-alias nvim="nvim -p"
-alias vim="nvim -p"
-alias vi="nvim -p"
+alias nv="nvim"
+alias nvim="nvim"
+alias vim="nvim"
+alias vi="nvim"
 alias n="neovide --frame None"
 
 alias vimrc="nvim -p ~/.config/nvim"

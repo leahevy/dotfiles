@@ -58,7 +58,7 @@
 [core]
     # pager = cat
     excludesfile = ~/.gitignore_global
-    editor = nvim -p
+    editor = nvim
     whitespace = -trailing-space
     autocrlf = input
 [diff]
@@ -69,7 +69,7 @@
     submodule = log
     tool = nvim
 [difftool "nvim"]
-    cmd = nvim -p -d $LOCAL $REMOTE
+    cmd = nvim -d $LOCAL $REMOTE
 [fetch]
     recurseSubmodules = on-demand
 [grep]
