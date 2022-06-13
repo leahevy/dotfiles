@@ -144,7 +144,7 @@ cp Brewfile .tmp/
 if [ "$OS" == "linux" ]; then
     sed -i '/^cask /d' .tmp/Brewfile
     sed -i '/^mas /d' .tmp/Brewfile
-    sed -i '/^brew "mas"/d' .tmp/Brewfile
+    sed -i '/^brew "homebrew\/core\/mas"/d' .tmp/Brewfile
     sed -i '/^tap "homebrew\/cask"/d' .tmp/Brewfile
     sed -i '/^tap "homebrew\/cask-fonts"/d' .tmp/Brewfile
 fi
