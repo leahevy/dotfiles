@@ -25,16 +25,9 @@ function fatal() {
 
 echo "Installing dotfiles ($SCRIPTPATH)"
 
-if ! command -v pip &> /dev/null; then
-    fatal "pip not found on system"
-fi
-
-echo "Installing mydotfiles Python package locally"
-pip install -e .
-
-echo "Linking dotfiles directory (Run 'mydotfiles' afterwards)"
-if [[ ! -e "$HOME/.dotfiles" ]]; then
-    ln -s "$(pwd)" "$HOME/.dotfiles"
+echo "Checking requirements"
+if ! command -v git &> /dev/null; then
+    fatal "git not found on system"
 fi
 
 OS="`uname`"
@@ -159,6 +152,19 @@ if [ "$OS" == "linux" ]; then
 fi
 
 echo "Dotfiles"
+
+if ! command -v pip &> /dev/null; then
+    fatal "pip not found on system"
+fi
+
+echo "Installing mydotfiles Python package locally"
+pip install -e .
+
+echo "Linking dotfiles directory (Run 'mydotfiles' afterwards)"
+if [[ ! -e "$HOME/.dotfiles" ]]; then
+    ln -s "$(pwd)" "$HOME/.dotfiles"
+fi
+
 read -p "Populate dotfiles now? [y?]" answerdotfiles
 if [[ "$answerdotfiles" == "y" ]]; then
     mydotfiles populate
