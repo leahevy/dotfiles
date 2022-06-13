@@ -35,6 +35,7 @@
     date = relative
 [alias]
     clean-all = clean -fdx
+    reset-full = "!f() { git clean -fdx; git checkout .; } ; f"
     pack-create = "!f() { git bundle create $1 --all; git bundle verify $1; } ; f"
     pack-create-with-stash = "!f() { git bundle create $1 refs/stash --all; git bundle verify $1; } ; f"
     pack-fetch-with-stash = "!f() { git fetch $1 refs/stash; git stash apply FETCH_HEAD; } ; f"
