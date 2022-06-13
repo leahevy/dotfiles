@@ -74,7 +74,11 @@ echo "Starting installation\nPasswords might be requested during the installatio
 echo "Check for Homebrew installation"
 if ! command -v brew &> /dev/null; then
     echo "Installing brew"
-    sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [ "$OS" == "linux" ]; then
+        mkdir /home/linuxbrew/.linuxbrew/Library
+        ln -s /home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew /home/linuxbrew/.linuxbrew/Library/Homebrew
+    fi
 
     if [ "$OS" == "osx" ]; then
         sudo git clone https://github.com/Homebrew/brew /usr/local/homebrew
@@ -138,6 +142,7 @@ if [ "$OS" == "linux" ]; then
     sed -i '/^cask /d' .tmp/Brewfile
     sed -i '/^mas /d' .tmp/Brewfile
     sed -i '/^brew "homebrew\/core\/mas"/d' .tmp/Brewfile
+    sed -i 's/-mac//g' .tmp/Brewfile
     sed -i '/^tap "homebrew\/cask"/d' .tmp/Brewfile
     sed -i '/^tap "homebrew\/cask-fonts"/d' .tmp/Brewfile
 fi
