@@ -34,6 +34,7 @@
     pretty = format:%Cred%h%Creset - %Cgreen%an (%ae) -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset
     date = relative
 [alias]
+    clean-all = clean -fdx
     pack-create = "!f() { git bundle create $1 --all; git bundle verify $1; } ; f"
     pack-create-with-stash = "!f() { git bundle create $1 refs/stash --all; git bundle verify $1; } ; f"
     pack-fetch-with-stash = "!f() { git fetch $1 refs/stash; git stash apply FETCH_HEAD; } ; f"
