@@ -15,6 +15,8 @@ from jinja2 import Environment, FileSystemLoader
 import typer
 from cryptography.fernet import Fernet
 
+from typing import List
+
 
 app = typer.Typer()
 
@@ -37,7 +39,7 @@ def genkey():
 
 
 @app.command()
-def encryptfile(filenames: list[str], dont_remove_original: bool = typer.Option(False, "-n", "--no-rm", help="Don't remove the original file")):
+def encryptfile(filenames: List[str], dont_remove_original: bool = typer.Option(False, "-n", "--no-rm", help="Don't remove the original file")):
     for filename in filenames:
         if not os.path.exists(filename):
             raise ValueError(f"File {filename} does not exist")
@@ -61,7 +63,7 @@ def encryptfile(filenames: list[str], dont_remove_original: bool = typer.Option(
 
 
 @app.command()
-def decryptfile(filenames: list[str], dont_remove_original: bool = typer.Option(False, "-n", "--no-rm", help="Don't remove the original file")):
+def decryptfile(filenames: List[str], dont_remove_original: bool = typer.Option(False, "-n", "--no-rm", help="Don't remove the original file")):
     for filename in filenames:
         if not os.path.exists(filename):
             raise ValueError(f"File {filename} does not exist")
@@ -214,7 +216,7 @@ def remove_nonexisting_from_target(filenames_new, targetdir, dry_run=False):
         os.chmod(datafilename, 0o600)
 
 
-def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool) -> list[str]:
+def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool) -> List[str]:
     new_files = []
     files_dir = os.path.realpath(files_dir)
     if glob.glob(os.path.join(files_dir, "*")):
