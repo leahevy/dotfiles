@@ -156,6 +156,11 @@ if [ "$OS" == "linux" ]; then
     DEBIAN_FRONTEND=noninteractive sudo apt-get -qq autoremove
 fi
 
+if [ "$OS" == "osx" ]; then
+    echo "Update MacOS Command Line Tools"
+    softwareupdate --all --install --force
+fi
+
 echo "Dotfiles"
 
 if ! command -v pip &> /dev/null; then
