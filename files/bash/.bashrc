@@ -66,13 +66,16 @@ alias fgrep="fgrep --color=auto"
 {% if (global["os"] == "osx") %}
 export HOMEBREW_PATH="/opt/homebrew/bin"
 export HOMEBREW_X86_PATH="/usr/local/homebrew/bin"
+export HOMEBREW_SBIN_PATH="/opt/homebrew/sbin"
+export HOMEBREW_X86_SBIN_PATH="/usr/local/homebrew/sbin"
 alias brew="arch -arm64 $HOMEBREW_PATH/brew"
 alias brewARM="arch -arm64 $HOMEBREW_PATH/brew"
 alias brew86="arch -x86_64 $HOMEBREW_X86_PATH/brew"
 {% else %}
 export HOMEBREW_PATH="/home/linuxbrew/.linuxbrew/bin"
+export HOMEBREW_SBIN_PATH="/home/linuxbrew/.linuxbrew/sbin"
 alias brew="$HOMEBREW_PATH/brew"
 {% endif %}
 
 
-export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_X86_PATH:$PATH"
+export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_SBIN_PATH:$HOMEBREW_X86_PATH:$HOMEBREW_X86_SBIN_PATH:$PATH"
