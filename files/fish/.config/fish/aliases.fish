@@ -3,7 +3,7 @@ if status is-interactive
 		set ORIG_GIT /usr/bin/git
 	    function git
 	        if not set -q argv[1]
-	            $ORIG_GIT status
+	            $ORIG_GIT st
 	        else
 	            $ORIG_GIT $argv
 	        end

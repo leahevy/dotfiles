@@ -47,12 +47,13 @@
     y = diff "@{yesterday}"
     w = whatchanged
     c = commit
-    st = status
+    st = status -sb
     dc = diff --cached
     co = checkout
     df = diff
     addp = add --patch
     diffc = diff --cached
+    rebase-origin = rebase -i origin/HEAD
     amendfiles = commit --amend --no-edit
     review-local = "!git lg @{push}.."
     reword = commit --amend
