@@ -53,6 +53,7 @@
     df = diff
     addp = add --patch
     diffc = diff --cached
+    head = show HEAD
     rebase-origin = rebase -i origin/HEAD
     amendfiles = commit --amend --no-edit
     review-local = "!git lg @{push}.."
