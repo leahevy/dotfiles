@@ -9,5 +9,6 @@ if status is-interactive
 	        end
 	    end
 		alias g="git"
+		alias ga="git a"
 	end
 end

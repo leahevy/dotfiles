@@ -52,6 +52,7 @@
     co = checkout
     df = diff
     addp = add --patch
+    a = add --patch
     diffc = diff --cached
     head = show HEAD
     rebase-origin = rebase -i origin/HEAD
