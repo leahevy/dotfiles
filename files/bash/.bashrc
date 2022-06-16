@@ -58,7 +58,12 @@ alias home='cd ~; ls'
 alias root='cd /; ls'
 alias db='cd ~/Dropbox; ls'
 
+{% if (global["os"] == "osx") %}
 alias o="open"
+{% else %}
+alias o="xdg-open"
+alias open="xdg-open"
+{% endif %}
 
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
