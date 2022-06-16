@@ -328,13 +328,18 @@ for app in "${TO_KILL[@]}"; do
     fi
 done
 
-sleep 3
-
 if (( ${#KILLED[@]} )); then
     for app in "${TO_RESTART[@]}"; do
         if [[ " ${KILLED[*]} " =~ " ${app} " ]]; then
-            echo "Restarting ${app}..."
-            open "/Applications/${app}.app" || true
+            while :; do
+                if pgrep -x "${app}" >/dev/null; then
+                    sleep 0.5
+                    continue
+                fi
+                echo "Restarting ${app}..."
+                open "/Applications/${app}.app" || true
+                break
+            done
         fi
     done
 fi
