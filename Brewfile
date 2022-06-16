@@ -97,6 +97,8 @@ cask "telegram"
 cask "the-unarchiver"
 cask "vlc"
 cask "whatsapp"
+cask "lastfm", args: { no_quarantine: true }
+cask "zoom"
 mas "AdBlock", id: 1402042596
 mas "Agenda", id: 1287445660
 mas "CleanMyMac-MAS", id: 1339170533
