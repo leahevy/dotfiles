@@ -18,6 +18,7 @@ alias vimrc="nvim -p ~/.config/nvim"
 alias neovimrc="nvim -p ~/.config/nvim"
 
 alias g="git"
+alias ga="git addp"
 
 alias l="ls --color=auto"
 alias ls="ls -hF --color=auto"
