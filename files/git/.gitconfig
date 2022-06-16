@@ -46,9 +46,10 @@
     l = log --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset %Cred[%G?]%Creset'
     g = "!f() { git log --graph --pretty=format:'%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %Cred[%G?]%Creset' --date=relative $@; } ; f"
     graph = "!f() { git log --graph --pretty=format:'%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset %Cred[%G?]%Creset' --date=relative $@; } ; f"
-    push-all = "!f() { git push $@; git push --tags $@; } ; f"
+    push-all = "!f() { git push --follow-tags $@; } ; f"
     y = diff "@{yesterday}"
     w = whatchanged
+    whatadded = log --diff-filter=A --
     c = commit
     st = status -sb
     dc = diff --cached
