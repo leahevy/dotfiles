@@ -15,6 +15,9 @@ if test "$(umask)" = "0000"
     umask 027
 end
 
-if command -v neofetch &> /dev/null
-    neofetch 2>/dev/null || true
+
+if status is-interactive
+    if command -v neofetch &> /dev/null
+        neofetch 2>/dev/null || true
+    end
 end

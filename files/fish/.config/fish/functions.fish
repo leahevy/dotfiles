@@ -12,7 +12,10 @@ function virtualenv-activate
         set -gx VENV ""
     end
 end
-virtualenv-activate 2>&1 >/dev/null
+
+if status is-interactive
+    virtualenv-activate 2>&1 >/dev/null
+end
 
 function __virtualenv-activate --on-variable PWD
   status --is-command-substitution; and return
