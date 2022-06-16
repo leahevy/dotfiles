@@ -57,6 +57,12 @@ alias more="less"
 alias home='cd ~; ls'
 alias root='cd /; ls'
 alias db='cd ~/Dropbox; ls'
+alias src='cd ~/Source/github.com/leahevy; ls'
+alias blog='cd ~/Source/github.com/leahevy/leahevy.github.io; ls'
+alias dotfiles='cd ~/.dotfiles; ls'
+alias dotf='cd ~/.dotfiles; ls'
+alias dotfiles-private='cd ~/.dotfiles-private; ls'
+alias dotfp='cd ~/.dotfiles-private; ls'
 
 {% if (global["os"] == "osx") %}
 alias o="open"
