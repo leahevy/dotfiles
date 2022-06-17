@@ -1,5 +1,4 @@
-source ~/.config/fish/from_bash.fish
-source ~/.config/fish/init.fish
-source ~/.config/fish/variables.fish
-source ~/.config/fish/aliases.fish
-source ~/.config/fish/functions.fish
+# Source all files in fish directory
+for file in $(ls "$HOME/.config/fish/fish")
+    source "$HOME/.config/fish/fish/$file"
+end
