@@ -148,6 +148,11 @@ if [ "$OS" == "linux" ]; then
 fi
 (cd .tmp; brew bundle)
 
+if [ "$OS" == "osx" ]; then
+    echo "Update AppStore packages"
+    mas upgrade
+fi
+
 echo "Cleaning up old brew packages"
 brew cleanup
 
