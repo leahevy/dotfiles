@@ -156,11 +156,6 @@ if [ "$OS" == "linux" ]; then
     DEBIAN_FRONTEND=noninteractive sudo apt-get -qq autoremove
 fi
 
-if [ "$OS" == "osx" ]; then
-    echo "Update MacOS Command Line Tools"
-    softwareupdate --all --install --force
-fi
-
 echo "Dotfiles"
 
 if ! command -v pip &> /dev/null; then
@@ -180,7 +175,6 @@ if [[ "$answerdotfiles" == "y" ]]; then
     mydotfiles populate
 fi
 
-
 if [ "$OS" == "osx" ]; then
     echo "MacOS defaults"
     read -p "Configure? [y?]" answermacos
@@ -189,4 +183,10 @@ if [ "$OS" == "osx" ]; then
     fi
 fi
 
-echo "Everything done"
+if [ "$OS" == "osx" ]; then
+    echo "MacOS Softwareupdate"
+    read -p "Run MacOS Softwareupdate" answersoftwareupdate
+    if [[ "$answersoftwareupdate" == "y" ]]; then
+        softwareupdate --all --install --force
+    fi
+fi
