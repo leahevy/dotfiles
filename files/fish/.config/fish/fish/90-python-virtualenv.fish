@@ -24,6 +24,8 @@ function virtualenv-activate
         set -gx VENV "$actfile"
         set_color green
         echo "++ Activate Python virtualenv ++"
+        set_color green
+        echo "++ [ $actfile ] ++"
         set_color normal
         source "$actfile" || true
     else
@@ -34,9 +36,11 @@ function virtualenv-activate
 end
 
 function virtualenv-deactivate
-	if [ "$VENV" != "" ]
+    if [ "$VENV" != "" ]
         set_color red
         echo "++ Deactivate Python virtualenv ++"
+        set_color red
+        echo "++ [ $VENV ] ++"
         set_color normal
         set -gx VENV ""
         deactivate 2>/dev/null >/dev/null || true
@@ -52,6 +56,17 @@ function virtualenv-reload
     else
         if [ "$VENV" != "" ]
             virtualenv-deactivate
+        else
+            if [ -e setup.py -o -e setup.cfg -o -e pyproject.toml ]
+                set_color yellow
+                echo "++ Python project found but no virtualenv configured ++"
+                echo -n "++ You might want to run: "
+                set_color blue
+                echo -n "'virtualenv-create'"
+                set_color yellow
+                echo " ++"
+                set_color normal
+            end
         end
     end
 end
@@ -67,7 +82,11 @@ function virtualenv-create
         echo "++ .venv directory already exists ++" >&2
         set_color normal
     else
-	    python -m venv .venv
+        set_color green
+        echo "++ Create Python virtualenv ++"
+        set_color normal
+        python -m venv .venv
+        virtualenv-activate
     end
 end
 
