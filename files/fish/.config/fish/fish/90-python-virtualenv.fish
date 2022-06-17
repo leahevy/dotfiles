@@ -43,7 +43,7 @@ function virtualenv-deactivate
     end
 end
 
-function _virtualenv-on_pwd
+function virtualenv-reload
     set -l actfile "$(_virtualenv-find_activate)"
     if [ "$actfile" != "" ]
         if [ "$actfile" != "$VENV" ]
@@ -58,7 +58,7 @@ end
 
 function __virtualenv-activate --on-variable PWD
   status --is-command-substitution; and return
-    _virtualenv-on_pwd
+    virtualenv-reload
 end
 
 function virtualenv-create
