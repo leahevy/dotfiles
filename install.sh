@@ -175,14 +175,14 @@ if [[ ! -e "$HOME/.dotfiles" ]]; then
     ln -s "$(pwd)" "$HOME/.dotfiles"
 fi
 
-read -p "Populate dotfiles now? [y?]" answerdotfiles
+read -p "Populate dotfiles now? [y?] " answerdotfiles
 if [[ "$answerdotfiles" == "y" ]]; then
     mydotfiles populate
 fi
 
 if [ "$OS" == "osx" ]; then
     echo "MacOS defaults"
-    read -p "Configure? [y?]" answermacos
+    read -p "Configure? [y?] " answermacos
     if [[ "$answermacos" == "y" ]]; then
         ./macos.sh
     fi
@@ -190,7 +190,7 @@ fi
 
 if [ "$OS" == "osx" ]; then
     echo "MacOS Softwareupdate"
-    read -p "Run MacOS Softwareupdate" answersoftwareupdate
+    read -p "Run MacOS Softwareupdate [y?] " answersoftwareupdate
     if [[ "$answersoftwareupdate" == "y" ]]; then
         softwareupdate --all --install --force
     fi
