@@ -53,6 +53,7 @@
     c = commit
     st = status -sb
     dc = diff --cached
+    d = diff
     co = checkout
     df = diff
     addp = add --patch
