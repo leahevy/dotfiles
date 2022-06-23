@@ -30,6 +30,10 @@ if ! command -v git &> /dev/null; then
     fatal "git not found on system"
 fi
 
+echo "Init and update submodules"
+git submodule init
+git submodule update
+
 OS="`uname`"
 
 case $OS in
