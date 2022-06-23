@@ -61,6 +61,9 @@
     diffc = diff --cached
     head = show HEAD
     h = show HEAD
+    patch-create = format-patch -k --stdout
+    patch-create-head = format-patch -k --stdout HEAD~1
+    patch-apply = am -3 -k
     rebase-origin = rebase -i origin/HEAD
     amendfiles = commit --amend --no-edit
     review-local = "!git lg @{push}.."
