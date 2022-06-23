@@ -90,5 +90,8 @@ export HOMEBREW_SBIN_PATH="/home/linuxbrew/.linuxbrew/sbin"
 alias brew="$HOMEBREW_PATH/brew"
 {% endif %}
 
+export GCC_VERSION="gcc-11"
+export CC="$($HOMEBREW_PATH/brew --prefix gcc)/bin/$GCC_VERSION"
+export CFLAGS="-O2"
 
 export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_SBIN_PATH:$HOMEBREW_X86_PATH:$HOMEBREW_X86_SBIN_PATH:$PATH"
