@@ -89,7 +89,3 @@ function virtualenv-create
         virtualenv-activate
     end
 end
-
-if status is-interactive
-    virtualenv-activate 2>/dev/null >/dev/null
-end
