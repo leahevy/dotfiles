@@ -14,9 +14,9 @@ if status is-interactive
     if command -v tmux &> /dev/null
         function tmx
             if not set -q argv[1]
-                tmux new -A -s "$USER"
+                tmux new -A -s "$(basename "$PWD")"
             else
-                tmux $argv
+                tmux new -A -s "$argv[1]"
             end
         end
         alias t="tmx"
