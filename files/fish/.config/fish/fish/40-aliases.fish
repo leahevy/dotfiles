@@ -14,7 +14,7 @@ if status is-interactive
     if command -v tmux &> /dev/null
         function tmx
             if not set -q argv[1]
-                tmux new -A -s "tmux-$USER"
+                tmux new -A -s "$USER"
             else
                 tmux $argv
             end
