@@ -170,6 +170,22 @@ fi
 echo "Installing mydotfiles Python package locally"
 pip install -e .
 
+echo "Installing mydotfiles shell completions"
+if command -v bash &> /dev/null; then
+    echo "Bash"
+    mydotfiles --install-completion=bash
+fi
+
+if command -v zsh &> /dev/null; then
+    echo "Zsh"
+    mydotfiles --install-completion=zsh
+fi
+
+if command -v fish &> /dev/null; then
+    echo "Fish"
+    mydotfiles --install-completion=fish
+fi
+
 echo "Linking dotfiles directory (Run 'mydotfiles' afterwards)"
 if [[ ! -e "$HOME/.dotfiles" ]]; then
     ln -s "$(pwd)" "$HOME/.dotfiles"
