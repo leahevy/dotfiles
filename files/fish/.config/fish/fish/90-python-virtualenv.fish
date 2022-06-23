@@ -77,7 +77,8 @@ function __virtualenv-activate --on-variable PWD
 end
 
 function virtualenv-create
-    if [ "$VENV" != "" ]
+    set -l actfile "$(_virtualenv-find_activate)"
+    if [ "$actfile" != "" -o "$VENV" != "" ]
         set_color red
         echo "++ Cannot create virtualenv inside virtualenv ++"
         set_color normal
