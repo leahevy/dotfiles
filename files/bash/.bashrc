@@ -76,6 +76,10 @@ alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
 
+alias cmatrix="cmatrix -s -r"
+alias matrix="cmatrix -s -r"
+alias screensaver="cmatrix -s -r"
+
 {% if (global["os"] == "osx") %}
 export HOMEBREW_PATH="/opt/homebrew/bin"
 export HOMEBREW_X86_PATH="/usr/local/homebrew/bin"
