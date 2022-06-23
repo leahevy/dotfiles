@@ -57,7 +57,7 @@ function virtualenv-reload
         if [ "$VENV" != "" ]
             virtualenv-deactivate
         else
-            if [ -e setup.py -o -e setup.cfg -o -e pyproject.toml ]
+            if [ -e setup.py -o -e setup.cfg -o -e pyproject.toml -o -e requirements.txt -o -e tox.ini ]
                 set_color yellow
                 echo "++ Python project found but no virtualenv configured ++"
                 echo -n "++ You might want to run: "
@@ -77,15 +77,37 @@ function __virtualenv-activate --on-variable PWD
 end
 
 function virtualenv-create
+    if [ "$VENV" != "" ]
+        set_color red
+        echo "++ Cannot create virtualenv inside virtualenv ++"
+        set_color normal
+        return 1
+    end
+    if ! command -v virtualenv &> /dev/null
+        pip install virtualenv || return 1
+    end
     if test -d "./.venv"
         set_color red
         echo "++ .venv directory already exists ++" >&2
         set_color normal
     else
+        if set -q argv[1]
+            if ! test -e "$(pyenv root)/versions/$argv[1]/bin/python"
+                set_color red
+                echo "++ Python version $argv[1] is not installed ++"
+                echo "++ Try 'pyenv install $argv[1]' ++"
+                set_color normal
+                return 1
+            end
+        end
         set_color green
         echo "++ Create Python virtualenv ++"
         set_color normal
-        python -m venv .venv
+        if not set -q argv[1]
+            virtualenv .venv >/dev/null
+        else
+            virtualenv .venv --python="$(pyenv root)/versions/$argv[1]/bin/python" >/dev/null
+        end
         virtualenv-activate
     end
 end
