@@ -74,7 +74,7 @@
     untrack = rm --cache --
     conflicts = diff --name-only --diff-filter=U
 [core]
-    # pager = cat
+    pager = TERM=xterm-color less
     excludesfile = ~/.gitignore_global
     editor = nvim
     whitespace = -trailing-space
