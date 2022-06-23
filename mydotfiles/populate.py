@@ -262,6 +262,19 @@ def process_files(files_dir: str, target_dir: str, env_dict: dict, dry_run: bool
             print(f"    Namespace {namespace}:")
         elif not path_rest:
             print(f"    Namespace {namespace} (empty)")
+        elif Path(full_path).is_symlink():
+            result_file_dir = os.path.dirname(result_file)
+            if not os.path.exists(result_file_dir):
+                print("      MakeDir", result_file_dir)
+                if not dry_run:
+                    os.makedirs(os.path.dirname(result_file), exist_ok=True)
+                    shutil.copystat(os.path.dirname(full_path), os.path.dirname(result_file))
+
+                    shutil.copystat(os.path.dirname(full_path), os.path.dirname(result_file))
+            linkto = os.readlink(full_path)
+            print(f"      Create symlink {result_file} (source={full_path}, link_dest={linkto})")
+            if not dry_run:
+                os.symlink(linkto, result_file)
         elif Path(full_path).is_dir():
             if not os.path.exists(result_file):
                 print("      MakeDir", result_file)

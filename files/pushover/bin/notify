@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+"$HOME/.dotfiles/modules/pushover-bash/pushover.sh" "$@"
