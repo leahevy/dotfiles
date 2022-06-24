@@ -1,7 +1,6 @@
 function fish-reload
-    fish-clear-cache
+    fish-reload-noclear
     clear
-    fish-source
 end
 
 function fish-reload-noclear
