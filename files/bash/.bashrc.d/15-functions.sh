@@ -1,16 +1,18 @@
-{% if (global["os"] == "linux") %}
 open() {
-    if [ ! -z "$DISPLAY" ]; then
-        xdg-open "$@"
+{% if (global["os"] == "linux") %}
+    export _ORIG_OPEN="xdg-open"
+{% else %}
+    export _ORIG_OPEN="/usr/bin/open"
+{% endif %}
+    echo "Filetype: $(file -0 "$1" | cut -f2- -d :)"
+    if [ "$(file -0 "$1" | cut -f2- -d : | grep "text")" != "" ]; then
+        echo "> Open in editor"
+        "$EDITOR" "$@"
     else
-        if [ "$(echo "$1" | grep "://" )" != "" ]; then
-            "$BROWSER" "$@"
-        else
-            "$EDITOR" "$@"
-        fi
+        echo "> Open in desktop"
+        $_ORIG_OPEN "$@"
     fi
 }
-{% endif %}
 
 if [ ! -z "$PS1" ]; then
     if command -v git &> /dev/null; then
