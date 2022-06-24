@@ -117,7 +117,22 @@ function convert-bash-to-fish-file
         echo "Missing file name for eval"
         return 1
     end
-    convert-bash-to-fish "$(cat "$argv[1]")"
+    set -l RECREATE "false"
+    # Cached result exists
+    if [ -e "/tmp/fishcache/$argv[1]" ]
+        # Check if source file has changed
+        if [ "$(stat -c %Z "$argv[1]")" != "$(cat "/tmp/fishcache/$argv[1]._STAT")" ]
+            set RECREATE "true"
+        end
+    else
+        set RECREATE "true"
+    end
+    if [ "$RECREATE" = "true" ]
+        mkdir -p "$(dirname "/tmp/fishcache/$argv[1]")"
+        stat -c %Z "$argv[1]" > "/tmp/fishcache/$argv[1]._STAT"
+        convert-bash-to-fish "$(cat "$argv[1]")" > "/tmp/fishcache/$argv[1]"
+    end
+    cat "/tmp/fishcache/$argv[1]"
 end
 
 function eval-bash
