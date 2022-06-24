@@ -3,7 +3,7 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 
 {% if (global["os"] == "osx") %}
-export BROWSER="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+export BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 {% else %}
 export BROWSER="chrome"
 {% endif %}

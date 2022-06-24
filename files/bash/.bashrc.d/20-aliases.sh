@@ -4,6 +4,8 @@ alias vim="nvim"
 alias vi="nvim"
 alias n="neovide --frame None"
 
+alias browser="$BROWSER -o"
+
 alias vimrc="nvim -p ~/.config/nvim"
 alias neovimrc="nvim -p ~/.config/nvim"
 
