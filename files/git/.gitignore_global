@@ -58,3 +58,7 @@ docs/_build/
 
 # Git bundles
 *.bundle
+
+# Ruby
+.ruby-version
+.vendor
