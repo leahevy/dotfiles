@@ -1,14 +1,29 @@
 function fish-reload
-    /bin/rm -rf /tmp/fishcache
+    fish-clear-cache
     clear
-    for file in $(ls "$HOME/.config/fish/fish")
-        source "$HOME/.config/fish/fish/$file"
-    end
+    fish-source
 end
 
 function fish-reload-noclear
+    fish-clear-cache
+    fish-source
+end
+
+function fish-clear-cache
+    set_color green
+    echo "++ Clear fish cache ++"
+    set_color normal
     /bin/rm -rf /tmp/fishcache
-    for file in $(ls "$HOME/.config/fish/fish")
-        source "$HOME/.config/fish/fish/$file"
-    end
+end
+
+function fish-source
+    set_color green
+    echo "++ Reload fish config ++"
+    set_color normal
+    set -gx _FISH_PRINT_SOURCING "true"
+    source "$HOME/.config/fish/config.fish"
+    set -gx _FISH_PRINT_SOURCING ""
+    set_color green
+    echo "++ Done ++"
+    set_color normal
 end
