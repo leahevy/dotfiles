@@ -1,5 +1,6 @@
-# Global init
-# -----------
+# Global init (once on first shell
+#   initialisation after boot)
+# --------------------------------
 function _fish_global_init
 end
 
@@ -12,8 +13,9 @@ function _fish_global_interactive_init
     end
 end
 
-# Local init
-# ----------
+# Local init (First initialisation of each shell instance.
+#   Not executed when reloading fish configuration)
+# --------------------------------------------------------
 function _fish_local_init
 end
 
@@ -24,8 +26,8 @@ function _fish_local_interactive_init
     fish_vi_key_bindings
 end
 
-# Always init
-# -----------
+# Always init (on each fish configuration reload)
+# -----------------------------------------------
 function _fish_always_init
     if command -v pyenv &> /dev/null
         status is-login; and pyenv init --path | source
