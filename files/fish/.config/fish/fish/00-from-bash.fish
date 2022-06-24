@@ -45,15 +45,15 @@ function convert-bash-to-fish
                 set -l value (echo $value | $_SED_CMD -E 's/[$][$]/$/g')
 
                 echo eval-bash-file "$value";
-	        case 'if [[ *'
-	            set -l val (echo $line | $_SED_CMD -E 's/^if \[\[(.*)\]\]\\s*;\\s*then\\s*/if [ \1 ]/')
-	            set -l val (echo $val | $_SED_CMD -E 's/^if \[\[(.*)\]\]\\s*/if [ \1 ]/')
+	        case '*if [[ *'
+	            set -l val (echo $line | $_SED_CMD -E 's/^(.*)if \[\[(.*)\]\]\\s*;\\s*then\\s*/\1if [ \2 ]/')
+	            set -l val (echo $val | $_SED_CMD -E 's/^(.*)if \[\[(.*)\]\]\\s*/if [ \1 ]/')
                 echo "$val"
-	        case 'if [ *'
-	            set -l val (echo $line | $_SED_CMD -E 's/^if \[(.*)\]\\s*;\\s*then\\s*/if [ \1 ]/')
+	        case '*if [ *'
+	            set -l val (echo $line | $_SED_CMD -E 's/^(.*)if \[(.*)\]\\s*;\\s*then\\s*/\1if [ \2 ]/')
                 echo "$val"
-	        case 'if *'
-	            set -l val (echo $line | $_SED_CMD -E 's/^if (.*)\\s*;\\s*then\\s*/if \1/')
+	        case '*if *'
+	            set -l val (echo $line | $_SED_CMD -E 's/^(.*)if (.*)\\s*;\\s*then\\s*/\1if \2/')
                 echo "$val"
 	        case '*()*{'
                 set -l val (echo $line | $_SED_CMD -E 's/^(.*)\(\)\\s*\{\\s*/function \1/')
