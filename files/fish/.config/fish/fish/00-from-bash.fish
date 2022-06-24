@@ -112,6 +112,8 @@ function convert-bash-to-fish
         set line "$(echo $line | $_SED_CMD -E 's/\$8/$argv[8]/')"
         set line "$(echo $line | $_SED_CMD -E 's/\$9/$argv[9]/')"
 
+        set line "$(echo $line | $_SED_CMD -E 's/elif/else if/')"
+
         echo "$line"
     end
 end

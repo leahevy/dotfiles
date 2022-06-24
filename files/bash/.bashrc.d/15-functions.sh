@@ -4,15 +4,18 @@ open() {
 {% else %}
     export _ORIG_OPEN="/usr/bin/open"
 {% endif %}
-    echo "Filetype: $(file -0 "$1" | cut -f2- -d :)"
-    if [ "$(file -0 "$1" | cut -f2- -d : | grep "text")" != "" ]; then
-        echo "  Open in '$EDITOR'"
+    filetype="$(file -0 "$1" | cut -f2- -d :)"
+    if [ "$(echo "$1" | grep ".txt")" != "" ]; then
+        echo "  Open in '$EDITOR' ($filetype)"
         "$EDITOR" "$@"
-    else if [ "$(file -0 "$1" | cut -f2- -d : | grep "JSON data")" != "" ]; then
-        echo "  Open in '$EDITOR'"
+    elif [ "$(echo "$filetype" | grep "text")" != "" ]; then
+        echo "  Open in '$EDITOR' ($filetype)"
         "$EDITOR" "$@"
-    else if [ "$(file -0 "$1" | cut -f2- -d : | grep "empty")" != "" ]; then
-        echo "  Open in '$EDITOR'"
+    elif [ "$(echo "$filetype" | grep "JSON data")" != "" ]; then
+        echo "  Open in '$EDITOR' ($filetype)"
+        "$EDITOR" "$@"
+    elif [ "$(echo "$filetype" | grep "empty")" != "" ]; then
+        echo "  Open empty file in '$EDITOR'"
         "$EDITOR" "$@"
     else
         echo "  Open in desktop ($_ORIG_OPEN)"
