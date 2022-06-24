@@ -1,9 +1,6 @@
 # Global init
 # -----------
 function _fish_global_init
-    if test "$(umask)" = "0000"
-        umask 027
-    end
 end
 
 function _fish_global_noninteractive_init
@@ -46,10 +43,6 @@ end
 
 function _fish_always_interactive_init
     set fish_greeting ""
-
-    if command -v pyenv &> /dev/null
-        alias python python3
-    end
 
     zoxide init fish | source
 

@@ -59,12 +59,7 @@ alias dotf='z ~/.dotfiles; exa -l'
 alias dotfiles-private='z ~/.dotfiles-private; exa -l'
 alias dotfp='z ~/.dotfiles-private; exa -l'
 
-{% if (global["os"] == "osx") %}
 alias o="open"
-{% else %}
-alias o="xdg-open"
-alias open="xdg-open"
-{% endif %}
 
 alias grep="rg"
 alias egrep="rg"
@@ -91,6 +86,8 @@ alias matrix="cmatrix -s -r"
 alias m="cmatrix -s -r"
 alias screensaver="cmatrix -s -r"
 alias ss="cmatrix -s -r"
+
+alias python="python3"
 
 {% if (global["os"] == "osx") %}
 alias brew="arch -arm64 $HOMEBREW_PATH/brew"

@@ -27,3 +27,7 @@ export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_SBIN_PA
 export GCC_VERSION="gcc-11"
 export CC="$($HOMEBREW_PATH/brew --prefix gcc)/bin/$GCC_VERSION"
 export CFLAGS="-O2"
+
+if [ "$TERM" = "tmux-256color" ]; then
+    export TERM="xterm-color"
+fi
