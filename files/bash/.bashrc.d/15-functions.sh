@@ -37,3 +37,8 @@ if [ ! -z "$PS1" ]; then
         alias screen="tmx"
     fi
 fi
+
+c() {
+    z "$@"
+    ll
+}

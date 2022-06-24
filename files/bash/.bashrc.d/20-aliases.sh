@@ -47,8 +47,6 @@ alias more="bat"
 alias less="bat"
 alias cat="bat"
 
-alias c="z"
-
 alias home='z ~; lsd -l --header --group-dirs=first'
 alias root='z /; lsd -l --header --group-dirs=first'
 alias db='z ~/Dropbox; lsd -l --header --group-dirs=first'
@@ -75,9 +73,9 @@ alias cloc="tokei"
 alias top="btm"
 alias htop="btm"
 
-alias dir='cd "$(xplr --print-pwd-as-result)"'
-alias list='cd "$(xplr --print-pwd-as-result)"'
-alias xcd='cd "$(xplr --print-pwd-as-result)"'
+alias dir='z "$(xplr --print-pwd-as-result)"'
+alias list='z "$(xplr --print-pwd-as-result)"'
+alias xcd='z "$(xplr --print-pwd-as-result)"'
 
 alias ps="procs"
 
