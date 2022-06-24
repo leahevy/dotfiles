@@ -11,6 +11,9 @@ open() {
     else if [ "$(file -0 "$1" | cut -f2- -d : | grep "JSON data")" != "" ]; then
         echo "  Open in '$EDITOR'"
         "$EDITOR" "$@"
+    else if [ "$(file -0 "$1" | cut -f2- -d : | grep "empty")" != "" ]; then
+        echo "  Open in '$EDITOR'"
+        "$EDITOR" "$@"
     else
         echo "  Open in desktop ($_ORIG_OPEN)"
         $_ORIG_OPEN "$@"
