@@ -11,13 +11,13 @@ alias g="git"
 alias ga="git addp"
 alias gl="git l"
 
-alias x="exa"
-alias l="exa"
-alias ls="exa -hF"
-alias ll="exa -l"
-alias lr="exa -R"
-alias la="exa -a"
-alias lla="exa -la"
+alias x="lsd"
+alias l="lsd"
+alias ls="lsd -hF"
+alias ll="lsd -l"
+alias lr="lsd -R"
+alias la="lsd -a"
+alias lla="lsd -la"
 
 alias p="pwd"
 alias pd="pwd"
@@ -49,15 +49,15 @@ alias cat="bat"
 
 alias c="z"
 
-alias home='z ~; exa -l'
-alias root='z /; exa -l'
-alias db='z ~/Dropbox; exa -l'
-alias src='z ~/Source/github.com/leahevy; exa -l'
-alias blog='z ~/Source/github.com/leahevy/leahevy.github.io; exa -l'
-alias dotfiles='z ~/.dotfiles; exa -l'
-alias dotf='z ~/.dotfiles; exa -l'
-alias dotfiles-private='z ~/.dotfiles-private; exa -l'
-alias dotfp='z ~/.dotfiles-private; exa -l'
+alias home='z ~; lsd -l'
+alias root='z /; lsd -l'
+alias db='z ~/Dropbox; lsd -l'
+alias src='z ~/Source/github.com/leahevy; lsd -l'
+alias blog='z ~/Source/github.com/leahevy/leahevy.github.io; lsd -l'
+alias dotfiles='z ~/.dotfiles; lsd -l'
+alias dotf='z ~/.dotfiles; lsd -l'
+alias dotfiles-private='z ~/.dotfiles-private; lsd -l'
+alias dotfp='z ~/.dotfiles-private; lsd -l'
 
 alias o="open"
 
