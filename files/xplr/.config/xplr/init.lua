@@ -2632,3 +2632,36 @@ keys.q = {
         "PrintResultAndQuit"
     }
 }
+
+keys.o = {
+  help = "Search a file using fzf",
+  messages = {
+      {
+        BashExec = [===[
+          source ~/.bashrc
+
+          NAME="$(fzf)"
+          if [ -e "$NAME" ]; then
+              open "$NAME"
+          fi
+        ]===],
+      },
+  }
+}
+
+keys.p = {
+  help = "Grep for a text using fzf and ripgrep",
+  messages = {
+      {
+        BashExec = [===[
+          source ~/.bashrc
+
+          read -p "Query: " QUERY
+          NAME="$(rg -c "$QUERY" | cut -f -1 -d ":" | fzf --preview 'cat {1}')"
+          if [ -e "$NAME" ]; then
+              open "$NAME"
+          fi
+        ]===],
+      },
+  }
+}
