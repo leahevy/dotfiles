@@ -1,14 +1,14 @@
 function fish-reload
-    fish-reload-noclear
-    clear
-end
-
-function fish-reload-noclear
-    fish-clear-cache
+    _fish-clear-cache
     fish-source
 end
 
-function fish-clear-cache
+function fish-reload-noclear
+    _fish-clear-cache
+    fish-source-noclear
+end
+
+function _fish-clear-cache
     set_color green
     echo "++ Clear fish cache ++"
     set_color normal
@@ -16,6 +16,11 @@ function fish-clear-cache
 end
 
 function fish-source
+    fish-source-noclear
+    clear
+end
+
+function fish-source-noclear
     set_color green
     echo "++ Reload fish config ++"
     set_color normal
