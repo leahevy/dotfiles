@@ -11,13 +11,13 @@ alias g="git"
 alias ga="git addp"
 alias gl="git l"
 
-alias x="lsd"
-alias l="lsd"
-alias ls="lsd -hF"
-alias ll="lsd -l"
-alias lr="lsd -R"
-alias la="lsd -a"
-alias lla="lsd -la"
+alias x="lsd --group-dirs=first"
+alias l="lsd --group-dirs=first"
+alias ls="lsd -hF --group-dirs=first"
+alias ll="lsd -l --header --group-dirs=first"
+alias lr="lsd -R --group-dirs=first"
+alias la="lsd -a --group-dirs=first"
+alias lla="lsd -la --header --group-dirs=first"
 
 alias p="pwd"
 alias pd="pwd"
@@ -49,15 +49,15 @@ alias cat="bat"
 
 alias c="z"
 
-alias home='z ~; lsd -l'
-alias root='z /; lsd -l'
-alias db='z ~/Dropbox; lsd -l'
-alias src='z ~/Source/github.com/leahevy; lsd -l'
-alias blog='z ~/Source/github.com/leahevy/leahevy.github.io; lsd -l'
-alias dotfiles='z ~/.dotfiles; lsd -l'
-alias dotf='z ~/.dotfiles; lsd -l'
-alias dotfiles-private='z ~/.dotfiles-private; lsd -l'
-alias dotfp='z ~/.dotfiles-private; lsd -l'
+alias home='z ~; lsd -l --header --group-dirs=first'
+alias root='z /; lsd -l --header --group-dirs=first'
+alias db='z ~/Dropbox; lsd -l --header --group-dirs=first'
+alias src='z ~/Source/github.com/leahevy; lsd -l --header --group-dirs=first'
+alias blog='z ~/Source/github.com/leahevy/leahevy.github.io; lsd -l --header --group-dirs=first'
+alias dotfiles='z ~/.dotfiles; lsd -l --header --group-dirs=first'
+alias dotf='z ~/.dotfiles; lsd -l --header --group-dirs=first'
+alias dotfiles-private='z ~/.dotfiles-private; lsd -l --header --group-dirs=first'
+alias dotfp='z ~/.dotfiles-private; lsd -l --header --group-dirs=first'
 
 alias o="open"
 
