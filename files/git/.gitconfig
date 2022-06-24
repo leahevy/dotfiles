@@ -41,7 +41,7 @@
     pack-create = "!f() { git bundle create $1 --all; git bundle verify $1; } ; f"
     pack-create-with-stash = "!f() { git bundle create $1 refs/stash --all; git bundle verify $1; } ; f"
     pack-fetch-with-stash = "!f() { git fetch $1 refs/stash; git stash apply FETCH_HEAD; } ; f"
-    config-grep = "!f() { git config --get-regexp '.*' | cat | grep \"$1\"; }; f"
+    config-grep = "!f() { git config --get-regexp '.*' | grep \"$1\" | bat; }; f"
     aliases = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
     lg = log --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset %Cred[%G?]%Creset'
     l = log --date=relative --pretty=tformat:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%an %ad)%Creset %Cred[%G?]%Creset'
@@ -74,7 +74,7 @@
     untrack = rm --cache --
     conflicts = diff --name-only --diff-filter=U
 [core]
-    pager = less
+    pager = bat
     excludesfile = ~/.gitignore_global
     editor = nvim
     whitespace = -trailing-space

@@ -51,5 +51,7 @@ function _fish_always_interactive_init
         alias python python3
     end
 
+    zoxide init fish | source
+
     virtualenv-activate 2>/dev/null >/dev/null
 end

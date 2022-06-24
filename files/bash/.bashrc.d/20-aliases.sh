@@ -11,17 +11,18 @@ alias g="git"
 alias ga="git addp"
 alias gl="git l"
 
-alias l="ls --color=auto"
-alias ls="ls -hF --color=auto"
-alias ll="ls -l --color=auto"
-alias lr="ls -R --color=auto"
-alias la="ls -a --color=auto"
-alias lla="ls -la --color=auto"
+alias x="exa"
+alias l="exa"
+alias ls="exa -hF"
+alias ll="exa -l"
+alias lr="exa -R"
+alias la="exa -a"
+alias lla="exa -la"
 
 alias p="pwd"
 alias pd="pwd"
 
-alias c="clear"
+alias cl="clear"
 
 alias h="history"
 
@@ -39,21 +40,24 @@ alias j='jobs -l'
 
 alias ping='ping -c 3'
 
-alias du='du -kh'
 alias df='df -kh'
 alias free='free -h'
 
-alias more="less"
+alias more="bat"
+alias less="bat"
+alias cat="bat"
 
-alias home='cd ~; ls'
-alias root='cd /; ls'
-alias db='cd ~/Dropbox; ls'
-alias src='cd ~/Source/github.com/leahevy; ls'
-alias blog='cd ~/Source/github.com/leahevy/leahevy.github.io; ls'
-alias dotfiles='cd ~/.dotfiles; ls'
-alias dotf='cd ~/.dotfiles; ls'
-alias dotfiles-private='cd ~/.dotfiles-private; ls'
-alias dotfp='cd ~/.dotfiles-private; ls'
+alias c="z"
+
+alias home='z ~; exa -l'
+alias root='z /; exa -l'
+alias db='z ~/Dropbox; exa -l'
+alias src='z ~/Source/github.com/leahevy; exa -l'
+alias blog='z ~/Source/github.com/leahevy/leahevy.github.io; exa -l'
+alias dotfiles='z ~/.dotfiles; exa -l'
+alias dotf='z ~/.dotfiles; exa -l'
+alias dotfiles-private='z ~/.dotfiles-private; exa -l'
+alias dotfp='z ~/.dotfiles-private; exa -l'
 
 {% if (global["os"] == "osx") %}
 alias o="open"
@@ -62,9 +66,25 @@ alias o="xdg-open"
 alias open="xdg-open"
 {% endif %}
 
-alias grep="grep --color=auto"
-alias egrep="egrep --color=auto"
-alias fgrep="fgrep --color=auto"
+alias grep="rg"
+alias egrep="rg"
+alias fgrep="rg"
+
+alias find="fd"
+
+alias du="dust"
+alias ctime="hyperfine"
+
+alias cloc="tokei"
+
+alias top="btm"
+alias htop="btm"
+
+alias dir='cd "$(xplr --print-pwd-as-result)"'
+alias list='cd "$(xplr --print-pwd-as-result)"'
+alias xcd='cd "$(xplr --print-pwd-as-result)"'
+
+alias ps="procs"
 
 alias cmatrix="cmatrix -s -r"
 alias matrix="cmatrix -s -r"

@@ -30,7 +30,7 @@ function convert-bash-to-fish
                 set -l value (echo $value | sed -E "s/^'(.*)'\$/\1/")
                 set -l value (echo $value | sed -E 's/[$][$]/$/g')
 
-                echo alias "$var=\"$value\";"
+                echo alias "$var='$value';"
 	        case '*=*'
 		        set -l var (echo $line | sed -E "s/^export ([A-Za-z0-9_-]+)=(.*)\$/\1/")
 		        set -l value (echo $line | sed -E "s/^export ([A-Za-z0-9_-]+)=(.*)\$/\2/")
@@ -75,6 +75,8 @@ function convert-bash-to-fish
                 echo
             case ''
                 echo
+            case 'eval *'
+                echo "$line"
             case '*'
                 echo "echo ERROR on line \"$line\" '(unsupported statement)' >&2"
                 return 1
@@ -85,7 +87,7 @@ function convert-bash-to-fish
         set -l line "$(echo "$lineorig" | sed -E 's/[$][$]/$/g')"
 	    switch $line
             case '*[  -z "$PS1"  ]*'
-                set -l val (echo $line | sed -E 's/\[  -z "\$PS1"  \]/status is-interactive/')
+                set -l val (echo $line | sed -E 's/\[  -z "\$PS1"  \]/status --is-interactive/')
                 echo "$val"
             case '*'
                 echo "$line"

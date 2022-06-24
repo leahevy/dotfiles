@@ -1,4 +1,4 @@
-export PAGER="less"
+export PAGER="bat"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
