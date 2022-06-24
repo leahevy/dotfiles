@@ -1126,9 +1126,11 @@ xplr.config.modes.builtin.default = {
         messages = {
             {
               BashExec = [===[
+                source ~/.bashrc
+
                 NAME="${XPLR_FOCUS_PATH:?}"
                 if [ -e "$NAME" ]; then
-                    open "$NAME" || nvim "$NAME"
+                    open "$NAME"
                 fi
               ]===],
             },
@@ -2622,23 +2624,9 @@ end
 -- You can also use nested tables such as
 -- `xplr.fn.custom.my_plugin.my_function` to define custom functions.
 xplr.fn.custom = {}
+keys = xplr.config.modes.builtin.default.key_bindings.on_key
 
-key = xplr.config.modes.builtin.default.key_bindings.on_key
-key.o = {
-  help = "Opens the focussed file",
-  messages = {
-    {
-      BashExec = [===[
-        NAME="${XPLR_FOCUS_PATH:?}"
-        if [ -e "$NAME" ]; then
-            open "$NAME" || nvim "$NAME"
-        fi
-      ]===],
-    },
-  }
-}
-
-key.q = {
+keys.q = {
     help = "Quits xplr",
     messages = {
         "PrintResultAndQuit"

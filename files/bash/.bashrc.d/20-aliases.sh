@@ -76,6 +76,7 @@ alias htop="btm"
 alias dir='z "$(xplr --print-pwd-as-result)"'
 alias list='z "$(xplr --print-pwd-as-result)"'
 alias xcd='z "$(xplr --print-pwd-as-result)"'
+alias d='z "$(xplr --print-pwd-as-result)"'
 
 alias ps="procs"
 
