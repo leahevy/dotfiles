@@ -24,9 +24,17 @@ private:
   git:
     name: <Your git commit name>
     mail: <Your git commit email>
+    signingkey: "0x<Your git gnupg key id>"
+  gnupg:
+    keyid: "0x<Your default key id>"
   user:
     name: <Your name>
     mail: <Your email>
+  dirs:
+    cloud: <Path to your cloud storage folder>
+    src: <Path to your root source code folder>
+    projects: <Path to your folder inside <src> where the projects are stored>
+    website: <Path to your repository of your website, if applicable>
 ```
 
 ## License
