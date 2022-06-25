@@ -39,9 +39,9 @@ if [ ! -z "$PS1" ]; then
     if command -v tmux &> /dev/null; then
         tmx() {
             if [ -z "$1" ]; then
-                tmux new -A -s "$(basename "$PWD")"
+                tmux -u new -A -s "$(basename "$PWD")"
             else
-                tmux new -A -s "$1"
+                tmux -u new -A -s "$1"
             fi
         }
         alias t="tmx"
