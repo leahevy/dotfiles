@@ -47,6 +47,8 @@ function _fish_always_interactive_init
     set fish_greeting ""
 
     zoxide init fish | source
+    alias cd="z"
+    alias zz="z -"
 
     virtualenv-activate 2>/dev/null >/dev/null
 end

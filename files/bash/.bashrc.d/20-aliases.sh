@@ -20,6 +20,7 @@ alias ll="lsd -l --header --group-dirs=first"
 alias lr="lsd -R --group-dirs=first"
 alias la="lsd -a --group-dirs=first"
 alias lla="lsd -la --header --group-dirs=first"
+alias tree="lsd --header --group-dirs=first --tree"
 
 alias p="pwd"
 alias pd="pwd"
@@ -47,15 +48,33 @@ alias free='free -h'
 
 alias more="bat"
 alias less="bat"
-alias cat="bat"
+alias cat="bat -p"
 
 alias home='z ~; lsd -l --header --group-dirs=first'
 alias root='z /; lsd -l --header --group-dirs=first'
-alias db='z ~/Dropbox; lsd -l --header --group-dirs=first'
-alias src='z ~/Source/github.com/leahevy; lsd -l --header --group-dirs=first'
-alias blog='z ~/Source/github.com/leahevy/leahevy.github.io; lsd -l --header --group-dirs=first'
+
+{% if private['dirs']['cloud'] %}
+alias db='z {{ private['dirs']['cloud'] }}; lsd -l --header --group-dirs=first'
+alias cloud='z {{ private['dirs']['cloud'] }}; lsd -l --header --group-dirs=first'
+{% endif %}
+
+{% if private['dirs']['src'] %}
+alias src='z {{ private['dirs']['src'] }}; lsd -l --header --group-dirs=first'
+{% endif %}
+
+{% if private['dirs']['projects'] %}
+alias prjs='z {{ private['dirs']['projects'] }}; lsd -l --header --group-dirs=first'
+alias projects='z {{ private['dirs']['projects'] }}; lsd -l --header --group-dirs=first'
+{% endif %}
+
+{% if private['dirs']['website'] %}
+alias website='z {{ private['dirs']['website'] }}; lsd -l --header --group-dirs=first'
+alias blog='z {{ private['dirs']['website'] }}; lsd -l --header --group-dirs=first'
+{% endif %}
+
 alias dotfiles='z ~/.dotfiles; lsd -l --header --group-dirs=first'
 alias dotf='z ~/.dotfiles; lsd -l --header --group-dirs=first'
+
 alias dotfiles-private='z ~/.dotfiles-private; lsd -l --header --group-dirs=first'
 alias dotfp='z ~/.dotfiles-private; lsd -l --header --group-dirs=first'
 

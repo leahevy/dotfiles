@@ -9,82 +9,82 @@ function convert-bash-to-fish
 
     set -l preprocessed "$(echo "$argv[1]" | while read lineorig
         set -l line "$(echo "$lineorig" | $_SED_CMD -E 's/[$]([^(])/$$\1/g' | $_SED_CMD -E 's/^\s*(.*)\s*/\1/')"
-	    switch $line
-	        case 'export *=*'
-		        set -l var (echo $line | $_SED_CMD -E "s/^export ([A-Za-z0-9_-]+)=(.*)\$/\1/")
-		        set -l value (echo $line | $_SED_CMD -E "s/^export ([A-Za-z0-9_-]+)=(.*)\$/\2/")
+        switch $line
+            case 'export *=*'
+                set -l var (echo $line | $_SED_CMD -E "s/^export ([A-Za-z0-9_-]+)=(.*)\$/\1/")
+                set -l value (echo $line | $_SED_CMD -E "s/^export ([A-Za-z0-9_-]+)=(.*)\$/\2/")
 
                 set -l value (echo $value | $_SED_CMD -E "s/^\"(.*)\"\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E "s/^'(.*)'\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E 's/[$][$]/$/g')
 
-	            # replace ":" by spaces. this is how PATH looks for Fish
-	            if test $var = "PATH"
-	                set value "$(echo $value | $_SED_CMD -E "s/:/\" \"/g")"
+                # replace ":" by spaces. this is how PATH looks for Fish
+                if test $var = "PATH"
+                    set value "$(echo $value | $_SED_CMD -E "s/:/\" \"/g")"
                     echo set -gx "$var" "\"$value\";"
                 else
                     echo set -gx "$var" "\"$value\";"
-	            end
-	        case 'export *'
-		        set -l var (echo $line | $_SED_CMD -E "s/^export ([A-Za-z0-9_-]+)\$/\1/")
+                end
+            case 'export *'
+                set -l var (echo $line | $_SED_CMD -E "s/^export ([A-Za-z0-9_-]+)\$/\1/")
                 echo set -gx "$var";
-	        case 'alias *=*'
-		        set -l var (echo $line | $_SED_CMD -E "s/^alias ([A-Za-z0-9_-]+)=(.*)\$/\1/")
-		        set -l value (echo $line | $_SED_CMD -E "s/^alias ([A-Za-z0-9_-]+)=(.*)\$/\2/")
+            case 'alias *=*'
+                set -l var (echo $line | $_SED_CMD -E "s/^alias ([A-Za-z0-9_-]+)=(.*)\$/\1/")
+                set -l value (echo $line | $_SED_CMD -E "s/^alias ([A-Za-z0-9_-]+)=(.*)\$/\2/")
 
                 set -l value (echo $value | $_SED_CMD -E "s/^\"(.*)\"\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E "s/^'(.*)'\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E 's/[$][$]/$/g')
 
                 echo alias "$var='$value';"
-	        case 'source *'
-	            set -l value (echo $line | $_SED_CMD -E 's/^source\\s*(.*)/\1/' | $_SED_CMD -E "s#~#$HOME#g")
+            case 'source *'
+                set -l value (echo $line | $_SED_CMD -E 's/^source\\s*(.*)/\1/' | $_SED_CMD -E "s#~#$HOME#g")
 
                 set -l value (echo $value | $_SED_CMD -E "s/^\"(.*)\"\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E "s/^'(.*)'\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E 's/[$][$]/$/g')
 
                 echo eval-bash-file "$value";
-	        case '*if [[ *'
-	            set -l val (echo $line | $_SED_CMD -E 's/^(.*)if \[\[(.*)\]\]\\s*;\\s*then\\s*/\1if [ \2 ]/')
-	            set -l val (echo $val | $_SED_CMD -E 's/^(.*)if \[\[(.*)\]\]\\s*/if [ \1 ]/')
+            case '*if [[ *'
+                set -l val (echo $line | $_SED_CMD -E 's/^(.*)if \[\[(.*)\]\]\\s*;\\s*then\\s*/\1if [ \2 ]/')
+                set -l val (echo $val | $_SED_CMD -E 's/^(.*)if \[\[(.*)\]\]\\s*/if [ \1 ]/')
                 echo "$val"
-	        case '*if [ *'
-	            set -l val (echo $line | $_SED_CMD -E 's/^(.*)if \[(.*)\]\\s*;\\s*then\\s*/\1if [ \2 ]/')
+            case '*if [ *'
+                set -l val (echo $line | $_SED_CMD -E 's/^(.*)if \[(.*)\]\\s*;\\s*then\\s*/\1if [ \2 ]/')
                 echo "$val"
-	        case '*if *'
-	            set -l val (echo $line | $_SED_CMD -E 's/^(.*)if (.*)\\s*;\\s*then\\s*/\1if \2/')
+            case '*if *'
+                set -l val (echo $line | $_SED_CMD -E 's/^(.*)if (.*)\\s*;\\s*then\\s*/\1if \2/')
                 echo "$val"
-	        case '*()*{'
+            case '*()*{'
                 set -l val (echo $line | $_SED_CMD -E 's/^(.*)\(\)\\s*\{\\s*/function \1/')
                 echo "$val"
-	        case '}'
+            case '}'
                 echo end
-	        case 'for *'
+            case 'for *'
                 set -l val (echo $line | $_SED_CMD -E 's/^for (.*)\\s*;\\s*do\\s*/for \1/')
                 echo "$val"
-	        case '*=*'
-		        set -l var (echo $line | $_SED_CMD -E "s/^([A-Za-z0-9_-]+)=(.*)\$/\1/")
-		        set -l value (echo $line | $_SED_CMD -E "s/^([A-Za-z0-9_-]+)=(.*)\$/\2/")
+            case '*=*'
+                set -l var (echo $line | $_SED_CMD -E "s/^([A-Za-z0-9_-]+)=(.*)\$/\1/")
+                set -l value (echo $line | $_SED_CMD -E "s/^([A-Za-z0-9_-]+)=(.*)\$/\2/")
 
                 set -l value (echo $value | $_SED_CMD -E "s/^\"(.*)\"\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E "s/^'(.*)'\$/\1/")
                 set -l value (echo $value | $_SED_CMD -E 's/[$][$]/$/g')
 
                 echo set "$var \"$value\";"
-	        case 'do'
+            case 'do'
                 echo
-	        case 'then'
+            case 'then'
                 echo
-	        case 'fi'
+            case 'fi'
                 echo end
-	        case 'done'
+            case 'done'
                 echo end
-	        case 'else'
+            case 'else'
                 echo else
-	        case '#*'
+            case '#*'
                 echo
-	        case ':'
+            case ':'
                 echo
             case ''
                 echo
@@ -111,6 +111,8 @@ function convert-bash-to-fish
         set line "$(echo $line | $_SED_CMD -E 's/\$7/$argv[7]/')"
         set line "$(echo $line | $_SED_CMD -E 's/\$8/$argv[8]/')"
         set line "$(echo $line | $_SED_CMD -E 's/\$9/$argv[9]/')"
+
+        set line "$(echo $line | $_SED_CMD -E 's/\$\?/$status/')"
 
         set line "$(echo $line | $_SED_CMD -E 's/elif/else if/')"
 

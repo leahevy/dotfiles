@@ -1,4 +1,5 @@
 function _fish_do_always_init
+    _fish_always_init
     if status is-interactive
         _fish_always_interactive_init
     else
