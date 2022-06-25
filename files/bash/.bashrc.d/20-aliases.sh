@@ -51,33 +51,33 @@ alias more="bat"
 alias less="bat"
 alias cat="bat -p"
 
-alias home='z ~; lsd -l --header --group-dirs=first'
-alias root='z /; lsd -l --header --group-dirs=first'
+alias home='cd ~'
+alias root='cd /'
 
 {% if private['dirs']['cloud'] %}
-alias db='z {{ private['dirs']['cloud'] }}; lsd -l --header --group-dirs=first'
-alias cloud='z {{ private['dirs']['cloud'] }}; lsd -l --header --group-dirs=first'
+alias db='cd "{{ private['dirs']['cloud'] }}"'
+alias cloud='cd "{{ private['dirs']['cloud'] }}"'
 {% endif %}
 
 {% if private['dirs']['src'] %}
-alias src='z {{ private['dirs']['src'] }}; lsd -l --header --group-dirs=first'
+alias src='cd "{{ private['dirs']['src'] }}"'
 {% endif %}
 
 {% if private['dirs']['projects'] %}
-alias prjs='z {{ private['dirs']['projects'] }}; lsd -l --header --group-dirs=first'
-alias projects='z {{ private['dirs']['projects'] }}; lsd -l --header --group-dirs=first'
+alias prjs='cd "{{ private['dirs']['projects'] }}"'
+alias projects='cd "{{ private['dirs']['projects'] }}"'
 {% endif %}
 
 {% if private['dirs']['website'] %}
-alias website='z {{ private['dirs']['website'] }}; lsd -l --header --group-dirs=first'
-alias blog='z {{ private['dirs']['website'] }}; lsd -l --header --group-dirs=first'
+alias website='cd "{{ private['dirs']['website'] }}"'
+alias blog='cd "{{ private['dirs']['website'] }}"'
 {% endif %}
 
-alias dotfiles='z ~/.dotfiles; lsd -l --header --group-dirs=first'
-alias dotf='z ~/.dotfiles; lsd -l --header --group-dirs=first'
+alias dotfiles='cd ~/.dotfiles'
+alias dotf='cd ~/.dotfiles'
 
-alias dotfiles-private='z ~/.dotfiles-private; lsd -l --header --group-dirs=first'
-alias dotfp='z ~/.dotfiles-private; lsd -l --header --group-dirs=first'
+alias dotfiles-private='cd ~/.dotfiles-private'
+alias dotfp='cd ~/.dotfiles-private'
 
 alias o="open"
 
@@ -111,9 +111,9 @@ alias ss="cmatrix -s -r"
 alias python="python3"
 
 {% if (global["os"] == "osx") %}
-alias brew="arch -arm64 $HOMEBREW_PATH/brew"
-alias brewARM="arch -arm64 $HOMEBREW_PATH/brew"
-alias brew86="arch -x86_64 $HOMEBREW_X86_PATH/brew"
+alias brew='arch -arm64 $HOMEBREW_PATH/brew'
+alias brewARM='arch -arm64 $HOMEBREW_PATH/brew'
+alias brew86='arch -x86_64 $HOMEBREW_X86_PATH/brew'
 {% else %}
-alias brew="$HOMEBREW_PATH/brew"
+alias brew='$HOMEBREW_PATH/brew'
 {% endif %}
