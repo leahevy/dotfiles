@@ -1,7 +1,13 @@
 #!/bin/bash
 
+ARGS=()
+for var in "$@"; do
+    IFS=$'\n' read -rd '' -a varsplitted <<<"$var"
+    ARGS+=("${varsplitted[@]}")
+done
+
 if [ -z ${NVIM_LISTEN_ADDRESS+x} ]; then
-  "$HOMEBREW_PATH/nvim" -p "$@"
+  "$HOMEBREW_PATH/nvim" -p "${ARGS[@]}"
 else
-  "$HOMEBREW_PATH/nvr" -cc tabedit --remote-wait +'set bufhidden=wipe' "$@"
+  "$HOMEBREW_PATH/nvr" -cc tabedit --remote-wait +'set bufhidden=wipe' "${ARGS[@]}"
 fi

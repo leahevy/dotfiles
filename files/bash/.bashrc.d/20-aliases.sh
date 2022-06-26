@@ -108,6 +108,9 @@ alias m="cmatrix -s -r"
 alias screensaver="cmatrix -s -r"
 alias ss="cmatrix -s -r"
 
+alias fzf='fzf --preview "cat {1}"'
+alias vimfzf='vim "$(fzf --multi --preview "cat {1}")"'
+
 alias python="python3"
 
 {% if (global["os"] == "osx") %}
