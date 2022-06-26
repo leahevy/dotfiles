@@ -53,3 +53,13 @@ c() {
     z "$@"
     ll
 }
+
+brew-fetch-cache() {
+    rm -f "$HOME/.brew-packages.cache"
+    brew search --formulae "" | tail -n +2 > "$HOME/.brew-packages.cache.1"
+    {% if (global["os"] == "osx") %}
+    brew search --casks "" | tail -n +2 > "$HOME/.brew-packages.cache.2"
+    {% endif %}
+    cat "$HOME/.brew-packages.cache".* | sort | uniq -u > "$HOME/.brew-packages.cache"
+    rm "$HOME/.brew-packages.cache".*
+}
