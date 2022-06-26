@@ -92,8 +92,8 @@ alias ctime="hyperfine"
 
 alias cloc="tokei"
 
-alias top="btm"
-alias htop="btm"
+alias top="htop"
+alias bottom="btm"
 
 alias dir='z "$(xplr --print-pwd-as-result)"'
 alias list='z "$(xplr --print-pwd-as-result)"'
