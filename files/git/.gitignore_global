@@ -60,5 +60,4 @@ docs/_build/
 *.bundle
 
 # Ruby
-.ruby-version
 .vendor
