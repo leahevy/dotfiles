@@ -83,11 +83,6 @@ if ! command -v brew &> /dev/null; then
         mkdir /home/linuxbrew/.linuxbrew/Library
         ln -s /home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew /home/linuxbrew/.linuxbrew/Library/Homebrew
     fi
-
-    if [ "$OS" == "osx" ]; then
-        sudo git clone https://github.com/Homebrew/brew /usr/local/homebrew
-        sudo chown -R "$USER" /usr/local/homebrew
-    fi
 fi
 
 function brew() {

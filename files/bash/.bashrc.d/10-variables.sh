@@ -10,16 +10,14 @@ export BROWSER="chrome"
 
 {% if (global["os"] == "osx") %}
 export HOMEBREW_PATH="/opt/homebrew/bin"
-export HOMEBREW_X86_PATH="/usr/local/homebrew/bin"
 export HOMEBREW_SBIN_PATH="/opt/homebrew/sbin"
-export HOMEBREW_X86_SBIN_PATH="/usr/local/homebrew/sbin"
 {% else %}
 export HOMEBREW_PATH="/home/linuxbrew/.linuxbrew/bin"
 export HOMEBREW_SBIN_PATH="/home/linuxbrew/.linuxbrew/sbin"
 {% endif %}
 
 {% if (global["os"] == "osx") %}
-export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_SBIN_PATH:$HOMEBREW_X86_PATH:$HOMEBREW_X86_SBIN_PATH:$PATH"
+export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_SBIN_PATH:$PATH"
 {% else %}
 export PATH="$HOME/bin:$HOME/dev:/usr/local/bin:$HOMEBREW_PATH:$HOMEBREW_SBIN_PATH:$PATH"
 {% endif %}

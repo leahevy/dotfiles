@@ -115,10 +115,9 @@ alias python="python3"
 
 {% if (global["os"] == "osx") %}
 alias brew='arch -arm64 $HOMEBREW_PATH/brew'
-alias brewARM='arch -arm64 $HOMEBREW_PATH/brew'
-alias brew86='arch -x86_64 $HOMEBREW_X86_PATH/brew'
+alias brew-install='cat $HOME/.brew-packages.cache | fzf --multi --preview "brew info {1}" | xargs -ro arch -arm64 brew install'
 {% else %}
 alias brew='$HOMEBREW_PATH/brew'
+alias brew-install='cat $HOME/.brew-packages.cache | fzf --multi --preview "brew info {1}" | xargs -ro brew install'
 {% endif %}
 
-alias brew-install='cat $HOME/.brew-packages.cache | fzf --multi --preview "brew info {1}" | xargs -ro brew install'
